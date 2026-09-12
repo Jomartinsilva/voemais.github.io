@@ -8,6 +8,7 @@
     <meta property="og:title" content="Voe Mais Viagens - Suas Férias Perfeitas">
     <meta property="og:description" content="Descubra destinos incríveis para sua família ou lua de mel">
     <title>Voe Mais Viagens - Pacotes Personalizados para Famílias e Casais</title>
+    <link rel="icon" type="image/png" href="images/logo-voemais.png">
     
     <style>
         /* ============================================
@@ -108,6 +109,12 @@
             letter-spacing: -1px;
         }
 
+        .logo-img {
+            height: 52px;
+            width: auto;
+            display: block;
+        }
+
         .logo span {
             color: var(--destaque);
         }
@@ -151,6 +158,10 @@
                 display: none;
             }
 
+            .logo-img {
+                height: 40px;
+            }
+
             .logo {
                 font-size: 1.4rem;
             }
@@ -165,7 +176,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             padding: 2rem;
         }
 
@@ -286,7 +297,7 @@
 
         .search-form {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto;
+            grid-template-columns: 1.6fr 1fr 1fr auto 1.6fr auto;
             gap: 1.5rem;
             align-items: flex-end;
         }
@@ -350,7 +361,8 @@
 
         @media (max-width: 1024px) {
             .search-form {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
         }
 
@@ -410,10 +422,9 @@
             box-shadow: 0 15px 40px var(--sombra-forte);
         }
 
-        .pacote-image {
+        .pacote-image-wrap {
             width: 100%;
             height: 250px;
-            background: linear-gradient(135deg, var(--azul-claro), var(--destaque));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -424,7 +435,7 @@
             position: relative;
         }
 
-        .pacote-image::before {
+        .pacote-image-wrap::before {
             content: '';
             position: absolute;
             top: 0;
@@ -433,6 +444,406 @@
             bottom: 0;
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="3" fill="white" opacity="0.1"/><circle cx="80" cy="50" r="2" fill="white" opacity="0.1"/><circle cx="50" cy="80" r="3" fill="white" opacity="0.1"/></svg>');
             opacity: 0.5;
+            z-index: 0;
+        }
+
+        /* Foto real do destino (some por cima do gradiente se o arquivo existir) */
+        .pacote-foto {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            transition: transform 0.5s ease;
+        }
+
+        /* Efeito de zoom no hover, igual ao padrão Decolar/Zupper */
+        .pacote-card:hover .pacote-foto,
+        .oferta-card:hover .oferta-foto {
+            transform: scale(1.08);
+        }
+
+        .pacote-image-caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%);
+            text-align: left;
+        }
+
+        /* ============================================
+           OFERTAS DA SEMANA (banners reais da Cativa)
+           ============================================ */
+        #ofertas-semana {
+            display: none; /* só aparece via JS quando há oferta com validade ativa */
+        }
+
+        .oferta-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px var(--sombra);
+            transition: var(--transicao);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .oferta-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--sombra-forte);
+        }
+
+        .oferta-foto-wrap {
+            overflow: hidden;
+        }
+
+        .oferta-foto {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .oferta-cta {
+            padding: 1.5rem;
+        }
+
+        /* ============================================
+           BOTÃO "VER FOTOS" + GALERIA (lightbox)
+           ============================================ */
+        .btn-ver-fotos {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.55);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+
+        .btn-ver-fotos:hover {
+            background: var(--destaque);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .lightbox-conteudo {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            text-align: center;
+        }
+
+        .lightbox-conteudo h3 {
+            color: var(--azul-principal);
+        }
+
+        .lightbox-fechar {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--cinza-texto);
+            line-height: 1;
+        }
+
+        .lightbox-imagem-area {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.5rem;
+            gap: 1rem;
+        }
+
+        .lightbox-imagem-area img {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .lightbox-seta {
+            background: var(--azul-principal);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+
+        .lightbox-seta:hover {
+            background: #0f2bb5;
+        }
+
+        .lightbox-contador {
+            margin-top: 1rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-conteudo {
+                padding: 1rem;
+            }
+
+            .lightbox-seta {
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ============================================
+           AUTOCOMPLETE DE DESTINO
+           ============================================ */
+        .form-group-destino {
+            position: relative;
+        }
+
+        .autocomplete-lista {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px var(--sombra-forte);
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 50;
+        }
+
+        .autocomplete-lista.aberta {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--cinza-texto);
+            text-align: left;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.ativo {
+            background: #f0f4ff;
+            color: var(--azul-principal);
+        }
+
+        .autocomplete-vazio {
+            padding: 0.7rem 1rem;
+            color: #999;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* ============================================
+           PASSAGEIROS E QUARTOS
+           ============================================ */
+        .form-group-passageiros {
+            position: relative;
+        }
+
+        .passageiros-resumo {
+            width: 100%;
+            text-align: left;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            font-size: 1rem;
+            color: var(--cinza-texto);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .passageiros-resumo:hover {
+            border-color: var(--azul-claro);
+        }
+
+        .passageiros-painel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px var(--sombra-forte);
+            padding: 1.25rem;
+            z-index: 50;
+        }
+
+        .passageiros-painel.aberto {
+            display: block;
+        }
+
+        .stepper-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stepper-label {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .stepper-label strong {
+            font-size: 0.95rem;
+            color: var(--cinza-texto);
+        }
+
+        .stepper-label span {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .stepper-controle {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .stepper-controle button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--azul-principal);
+            background: white;
+            color: var(--azul-principal);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .stepper-controle button:hover {
+            background: var(--azul-principal);
+            color: white;
+        }
+
+        .stepper-controle span {
+            min-width: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .idade-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.5rem 0 0.5rem 1rem;
+        }
+
+        .idade-row label {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        .idade-row select {
+            padding: 0.4rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+        }
+
+        .btn-aplicar-passageiros {
+            width: 100%;
+            margin-top: 0.75rem;
+            padding: 0.7rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--azul-principal);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .checkbox-inline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--cinza-texto);
+            cursor: pointer;
+        }
+
+        .form-group-somente-ida {
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 0.4rem;
+        }
+
+        /* ============================================
+           MODAL DE COTAÇÃO
+           ============================================ */
+        .modal-cotacao-conteudo {
+            max-width: 480px;
+            text-align: left;
+        }
+
+        .modal-cotacao-conteudo h3 {
+            text-align: left;
+            padding-right: 1.5rem;
+        }
+
+        .modal-cotacao-intro {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.5rem 0 1.25rem;
+        }
+
+        .modal-cotacao-conteudo .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .modal-cotacao-btn {
+            width: 100%;
         }
 
         .pacote-content {
@@ -483,6 +894,20 @@
         .pacote-preco-desc {
             color: #999;
             font-size: 0.85rem;
+        }
+
+        .pacote-preco-aviso {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            color: #b26a00;
+            background: #fff4e5;
+            border-left: 3px solid var(--destaque);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            margin-top: -0.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .pacote-features {
@@ -672,7 +1097,7 @@
     <header>
         <div class="header-container">
             <div class="logo">
-                Voe<span>+</span>
+                <img src="images/logo-voemais.png" alt="Voe Mais Viagens & Turismo" class="logo-img">
             </div>
             <nav>
                 <a href="#pacotes">Pacotes</a>
@@ -691,32 +1116,89 @@
         <div class="hero-content">
             <h1>Suas Férias Perfeitas Começam Aqui</h1>
             <p class="hero-subtitle">
-                Pacotes personalizados para famílias e casais com as melhores experiências
+                Pacotes personalizados para família e casais com as melhores experiências
             </p>
             
             <div class="search-section">
-                <form class="search-form" onsubmit="buscarViagens(event)">
-                    <div class="form-group">
+                <form class="search-form" id="formBusca" onsubmit="return processarBusca(event)">
+                    <div class="form-group form-group-destino">
                         <label for="destino">Destino</label>
-                        <input type="text" id="destino" placeholder="Para onde viajar?" required>
+                        <input type="text" id="destino" placeholder="Para onde viajar?" autocomplete="off" oninput="filtrarAutocompleteDestino()">
+                        <div class="autocomplete-lista" id="destinoLista"></div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="data-saida">Saída</label>
-                        <input type="date" id="data-saida" required>
+
+                    <div class="form-group form-group-datas">
+                        <label for="data-ida">Ida</label>
+                        <input type="date" id="data-ida" oninput="document.getElementById('data-volta').min = this.value">
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="passageiros">Passageiros</label>
-                        <select id="passageiros" required>
-                            <option value="">Selecionar</option>
-                            <option value="2">2 pessoas</option>
-                            <option value="3">3 pessoas</option>
-                            <option value="4">4 pessoas</option>
-                            <option value="5">5+ pessoas</option>
-                        </select>
+
+                    <div class="form-group form-group-datas" id="grupoVolta">
+                        <label for="data-volta">Volta</label>
+                        <input type="date" id="data-volta">
                     </div>
-                    
+
+                    <div class="form-group form-group-somente-ida">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="somenteIda" onchange="alternarSomenteIda()">
+                            Só ida (sem volta)
+                        </label>
+                    </div>
+
+                    <div class="form-group form-group-passageiros">
+                        <label>Passageiros e quartos</label>
+                        <button type="button" class="passageiros-resumo" id="passageirosResumo" onclick="togglePainelPassageiros()">
+                            2 adultos · 1 quarto
+                        </button>
+                        <div class="passageiros-painel" id="passageirosPainel">
+                            <div class="stepper-row">
+                                <div class="stepper-label">
+                                    <strong>Adultos</strong>
+                                    <span>18 a 59 anos</span>
+                                </div>
+                                <div class="stepper-controle">
+                                    <button type="button" onclick="alterarContador('adultos', -1)">−</button>
+                                    <span id="qtd-adultos">2</span>
+                                    <button type="button" onclick="alterarContador('adultos', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="stepper-row">
+                                <div class="stepper-label">
+                                    <strong>Crianças</strong>
+                                    <span>0 a 17 anos</span>
+                                </div>
+                                <div class="stepper-controle">
+                                    <button type="button" onclick="alterarContador('criancas', -1)">−</button>
+                                    <span id="qtd-criancas">0</span>
+                                    <button type="button" onclick="alterarContador('criancas', 1)">+</button>
+                                </div>
+                            </div>
+                            <div id="idadesCriancas"></div>
+                            <div class="stepper-row">
+                                <div class="stepper-label">
+                                    <strong>60 anos ou mais</strong>
+                                    <span>informar idade</span>
+                                </div>
+                                <div class="stepper-controle">
+                                    <button type="button" onclick="alterarContador('idosos', -1)">−</button>
+                                    <span id="qtd-idosos">0</span>
+                                    <button type="button" onclick="alterarContador('idosos', 1)">+</button>
+                                </div>
+                            </div>
+                            <div id="idadesIdosos"></div>
+                            <div class="stepper-row">
+                                <div class="stepper-label">
+                                    <strong>Quartos</strong>
+                                </div>
+                                <div class="stepper-controle">
+                                    <button type="button" onclick="alterarContador('quartos', -1)">−</button>
+                                    <span id="qtd-quartos">1</span>
+                                    <button type="button" onclick="alterarContador('quartos', 1)">+</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-aplicar-passageiros" onclick="togglePainelPassageiros()">Aplicar</button>
+                        </div>
+                    </div>
+
                     <button type="submit" class="search-btn">Buscar</button>
                 </form>
             </div>
@@ -730,6 +1212,15 @@
                 </button>
             </div>
         </div>
+    </section>
+
+    <!-- ============ OFERTAS DA SEMANA (banners reais, com validade) ============ -->
+    <section id="ofertas-semana">
+        <div class="section-title">
+            <h2>🔥 Ofertas da Semana</h2>
+            <p>Voo, hotel e preço reais — sujeitos a disponibilidade</p>
+        </div>
+        <div class="pacotes-grid" id="ofertas-semana-grid"></div>
     </section>
 
     <!-- ============ PACOTES ============ -->
@@ -748,8 +1239,9 @@
             <div class="pacotes-grid">
                 <!-- PACOTE 1 - RIO DE JANEIRO -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #1e90ff, #00bfff);">
-                        🏖️ Rio de Janeiro
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #1e90ff, #00bfff);">
+                        <img src="images/destinos/rio-de-janeiro.jpg" alt="Rio de Janeiro" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🏖️ Rio de Janeiro</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Rio Maravilhoso</h3>
@@ -779,8 +1271,9 @@
 
                 <!-- PACOTE 2 - SALVADOR -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #ff7a00, #ffa500);">
-                        🏝️ Salvador
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #ff7a00, #ffa500);">
+                        <img src="images/destinos/salvador.jpg" alt="Salvador" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🏝️ Salvador</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Bahia de Todos</h3>
@@ -810,8 +1303,9 @@
 
                 <!-- PACOTE 3 - NATAL -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #00d9ff, #00bfff);">
-                        🌴 Natal
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #00d9ff, #00bfff);">
+                        <img src="images/destinos/natal.jpg" alt="Natal" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🌴 Natal</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Caribe Potiguar</h3>
@@ -841,8 +1335,9 @@
 
                 <!-- PACOTE 4 - FLORIANÓPOLIS -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #00cc99, #00ddaa);">
-                        🌊 Florianópolis
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #00cc99, #00ddaa);">
+                        <img src="images/destinos/florianopolis.jpg" alt="Florianópolis" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🌊 Florianópolis</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Magia da Ilha</h3>
@@ -872,8 +1367,9 @@
 
                 <!-- PACOTE 5 - GRAMADO E CANELA -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #8b4513, #d2691e);">
-                        🏔️ Gramado & Canela
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #8b4513, #d2691e);">
+                        <img src="images/destinos/gramado-e-canela.jpg" alt="Gramado & Canela" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🏔️ Gramado & Canela</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Encanto da Serra</h3>
@@ -903,8 +1399,9 @@
 
                 <!-- PACOTE 6 - FÓRMULA 1 / BRASÍLIA -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #1f4bff, #2fa8ff);">
-                        🏛️ Brasília
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #1f4bff, #2fa8ff);">
+                        <img src="images/destinos/brasilia.jpg" alt="Brasília" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🏛️ Brasília</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Brasília Monumental</h3>
@@ -943,8 +1440,9 @@
             <div class="pacotes-grid">
                 <!-- PACOTE INT 1 - SANTIAGO -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f);">
-                        🗻 Santiago do Chile
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f);">
+                        <img src="images/destinos/santiago-do-chile.jpg" alt="Santiago do Chile" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🗻 Santiago do Chile</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Andes Chilenos</h3>
@@ -974,8 +1472,9 @@
 
                 <!-- PACOTE INT 2 - BUENOS AIRES -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
-                        💃 Buenos Aires
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                        <img src="images/destinos/buenos-aires.jpg" alt="Buenos Aires" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">💃 Buenos Aires</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Paris da América</h3>
@@ -1005,8 +1504,9 @@
 
                 <!-- PACOTE INT 3 - CUSCO / MACHU PICCHU -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
-                        🏛️ Cusco & Machu Picchu
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                        <img src="images/destinos/cusco-e-machu-picchu.jpg" alt="Cusco & Machu Picchu" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🏛️ Cusco & Machu Picchu</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Mistério Inca</h3>
@@ -1036,8 +1536,9 @@
 
                 <!-- PACOTE INT 4 - CARTAGENA -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
-                        🏰 Cartagena
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                        <img src="images/destinos/cartagena.jpg" alt="Cartagena" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🏰 Cartagena</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Joia Caribenha</h3>
@@ -1067,8 +1568,9 @@
 
                 <!-- PACOTE INT 5 - MÉXICO -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #16a085, #138d75);">
-                        🏖️ Riviera Maia
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #16a085, #138d75);">
+                        <img src="images/destinos/riviera-maia.jpg" alt="Riviera Maia" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🏖️ Riviera Maia</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Paraíso Mexicano</h3>
@@ -1098,8 +1600,9 @@
 
                 <!-- PACOTE INT 6 - ORLANDO -->
                 <div class="pacote-card">
-                    <div class="pacote-image" style="background: linear-gradient(135deg, #3498db, #2980b9);">
-                        🎢 Orlando
+                    <div class="pacote-image-wrap" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                        <img src="images/destinos/orlando.jpg" alt="Orlando" class="pacote-foto" loading="lazy" onerror="this.style.display='none'">
+                        <div class="pacote-image-caption">🎢 Orlando</div>
                     </div>
                     <div class="pacote-content">
                         <h3 class="pacote-titulo">Magia da Flórida</h3>
@@ -1313,6 +1816,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-section">
+                <img src="images/logo-voemais.png" alt="Voe Mais Viagens & Turismo" style="height: 56px; width: auto; margin-bottom: 1rem;">
                 <h4>Voe Mais Viagens</h4>
                 <p>Viagens personalizadas para famílias e casais.</p>
                 <p style="margin-top: 1rem; font-size: 0.9rem;">
@@ -1327,7 +1831,7 @@
             <div class="footer-section">
                 <h4>Redes Sociais</h4>
                 <a href="https://www.instagram.com/travelvoemais?igsh=MXJuMjZscTJ3dDVjYQ==" target="_blank">📸 Instagram</a>
-                <a href="https://wa.me/5531982321020" target="_blank">💬 WhatsApp</a>
+                <a href="https://wa.me/5531983097640" target="_blank">💬 WhatsApp</a>
             </div>
 
             <div class="footer-section">
@@ -1340,8 +1844,9 @@
 
             <div class="footer-section">
                 <h4>Contato</h4>
-                <p>📞 WhatsApp: <a href="https://wa.me/5531982321020" target="_blank">(31) 9 8232-1020</a></p>
+                <p>📞 WhatsApp: <a href="https://wa.me/5531983097640" target="_blank">(31) 9 8309-7640</a></p>
                 <p>📞 Suporte: <a href="https://wa.me/5531983002955" target="_blank">(31) 9 8300-2955</a></p>
+                <p>✉️ <a href="mailto:travel.voemais@gmail.com">travel.voemais@gmail.com</a></p>
                 <p>🕐 Seg-Dom: 8h às 18h</p>
             </div>
         </div>
@@ -1351,18 +1856,88 @@
         </div>
     </footer>
 
+    <!-- ============ LIGHTBOX (galeria "o melhor de cada destino") ============ -->
+    <div id="lightbox" class="lightbox" onclick="fecharLightbox()">
+        <div class="lightbox-conteudo" onclick="event.stopPropagation()">
+            <button class="lightbox-fechar" onclick="fecharLightbox()">✕</button>
+            <h3 id="lightbox-titulo"></h3>
+            <div class="lightbox-imagem-area">
+                <button class="lightbox-seta" onclick="navegarLightbox(-1)">‹</button>
+                <img id="lightbox-img" src="" alt="">
+                <button class="lightbox-seta" onclick="navegarLightbox(1)">›</button>
+            </div>
+            <p id="lightbox-contador" class="lightbox-contador"></p>
+        </div>
+    </div>
+
+    <!-- ============ MODAL DE COTAÇÃO (quando não há pacote pré-montado) ============ -->
+    <div id="modalCotacao" class="lightbox" onclick="fecharModalCotacao()">
+        <div class="lightbox-conteudo modal-cotacao-conteudo" onclick="event.stopPropagation()">
+            <button class="lightbox-fechar" onclick="fecharModalCotacao()">✕</button>
+            <h3>Ainda não temos um pacote pronto com essa configuração</h3>
+            <p class="modal-cotacao-intro">Sem problema — complete os dados abaixo que te mandamos uma cotação personalizada:</p>
+            <form id="formCotacao" onsubmit="return enviarCotacao(event)">
+                <div class="form-group">
+                    <label for="perfilViagem">Me proponha! Qual o seu perfil de viagem?</label>
+                    <select id="perfilViagem" required>
+                        <option value="">Selecionar</option>
+                        <option value="Praia e relax">Praia e relax</option>
+                        <option value="Aventura">Aventura</option>
+                        <option value="Cultura e cidade">Cultura e cidade</option>
+                        <option value="Lua de mel / romântico">Lua de mel / romântico</option>
+                        <option value="Em família">Em família</option>
+                        <option value="Luxo">Luxo</option>
+                        <option value="Econômico">Econômico</option>
+                        <option value="Me proponha! (vocês escolhem por mim)">Me proponha! (vocês escolhem por mim)</option>
+                    </select>
+                </div>
+
+                <div class="form-group checkbox-row">
+                    <label class="checkbox-inline"><input type="checkbox" id="querSeguro"> Quero seguro viagem</label>
+                    <label class="checkbox-inline"><input type="checkbox" id="querTransfer"> Quero transfer aeroporto/hotel</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="emailContato">E-mail</label>
+                    <input type="email" id="emailContato" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefoneContato">Telefone / WhatsApp</label>
+                    <input type="tel" id="telefoneContato" placeholder="(31) 9XXXX-XXXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="canalContato">Como prefere ser atendido?</label>
+                    <select id="canalContato" required>
+                        <option value="">Selecionar</option>
+                        <option value="WhatsApp">WhatsApp</option>
+                        <option value="E-mail">E-mail</option>
+                        <option value="Ligação">Ligação (voz)</option>
+                        <option value="Mensagem de texto">Mensagem de texto (SMS)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="search-btn modal-cotacao-btn">Enviar para cotação</button>
+            </form>
+        </div>
+    </div>
+
     <!-- ============ SCRIPT ============ -->
     <script>
         /**
          * Abre o WhatsApp com uma mensagem pré-definida
          * @param {string} pacote - Nome do pacote selecionado
+         * @param {string} mensagemCompleta - Se informada, usa esse texto em vez do padrão (usado pelo modal de cotação)
          */
-        function abrirWhatsApp(pacote = '') {
-            const numeroWhatsApp = '5531982321020'; // Contato principal Voe Mais
-            const mensagem = pacote 
-                ? `Olá! Gostaria de mais informações sobre o pacote: ${pacote}`
-                : `Olá! Gostaria de conhecer os pacotes de viagem da Voe Mais e receber um orçamento.`;
-            
+        function abrirWhatsApp(pacote = '', mensagemCompleta = '') {
+            const numeroWhatsApp = '5531983097640'; // Contato principal Voe Mais
+            const mensagem = mensagemCompleta
+                ? mensagemCompleta
+                : (pacote
+                    ? `Olá! Gostaria de mais informações sobre o pacote: ${pacote}`
+                    : `Olá! Gostaria de conhecer os pacotes de viagem da Voe Mais e receber um orçamento.`);
+
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
         }
@@ -1376,20 +1951,248 @@
         }
 
         /**
-         * Processa a busca de viagens
-         * @param {Event} event - Evento do formulário
+         * ===================== BUSCA: ESTADO E CONFIGURAÇÃO =====================
          */
-        function buscarViagens(event) {
+        const contadores = { adultos: 2, criancas: 0, idosos: 0, quartos: 1 };
+        const LIMITES = { adultos: [1, 9], criancas: [0, 6], idosos: [0, 6], quartos: [1, 5] };
+        let listaDestinos = [];
+
+        /**
+         * Carrega os nomes de destino a partir de destinos.json pro autocomplete.
+         * Se o arquivo não existir/falhar, o campo continua funcionando como texto livre.
+         */
+        async function carregarListaDestinos() {
+            try {
+                const resposta = await fetch('destinos.json', { cache: 'no-store' });
+                if (!resposta.ok) return;
+                const destinos = await resposta.json();
+                listaDestinos = Object.values(destinos).map(d => d.nome).sort();
+            } catch (erro) {
+                console.log('Lista de destinos indisponível:', erro);
+            }
+        }
+
+        function filtrarAutocompleteDestino() {
+            const input = document.getElementById('destino');
+            const lista = document.getElementById('destinoLista');
+            const termo = input.value.trim().toLowerCase();
+
+            if (!termo) {
+                lista.classList.remove('aberta');
+                lista.innerHTML = '';
+                return;
+            }
+
+            const encontrados = listaDestinos.filter(nome => nome.toLowerCase().includes(termo));
+
+            if (encontrados.length === 0) {
+                lista.innerHTML = '<div class="autocomplete-vazio">Nenhum destino encontrado — pode digitar do seu jeito mesmo assim</div>';
+            } else {
+                lista.innerHTML = encontrados.map(nome =>
+                    `<div class="autocomplete-item" onclick="selecionarDestinoAutocomplete('${nome.replace(/'/g, "\\'")}')">${nome}</div>`
+                ).join('');
+            }
+            lista.classList.add('aberta');
+        }
+
+        function selecionarDestinoAutocomplete(nome) {
+            document.getElementById('destino').value = nome;
+            const lista = document.getElementById('destinoLista');
+            lista.classList.remove('aberta');
+            lista.innerHTML = '';
+        }
+
+        // Fecha a lista de autocomplete ao clicar fora
+        document.addEventListener('click', (evento) => {
+            const grupo = document.querySelector('.form-group-destino');
+            if (grupo && !grupo.contains(evento.target)) {
+                document.getElementById('destinoLista').classList.remove('aberta');
+            }
+        });
+
+        /**
+         * ===================== SÓ IDA =====================
+         */
+        function alternarSomenteIda() {
+            const somenteIda = document.getElementById('somenteIda').checked;
+            const grupoVolta = document.getElementById('grupoVolta');
+            grupoVolta.style.display = somenteIda ? 'none' : 'flex';
+        }
+
+        /**
+         * ===================== PASSAGEIROS E QUARTOS =====================
+         */
+        function togglePainelPassageiros() {
+            document.getElementById('passageirosPainel').classList.toggle('aberto');
+        }
+
+        document.addEventListener('click', (evento) => {
+            const grupo = document.querySelector('.form-group-passageiros');
+            if (grupo && !grupo.contains(evento.target)) {
+                document.getElementById('passageirosPainel').classList.remove('aberto');
+            }
+        });
+
+        function alterarContador(chave, delta) {
+            const [min, max] = LIMITES[chave];
+            const novoValor = contadores[chave] + delta;
+            if (novoValor < min || novoValor > max) return;
+
+            contadores[chave] = novoValor;
+            document.getElementById(`qtd-${chave}`).textContent = novoValor;
+
+            if (chave === 'criancas') renderizarIdades('criancas', 'idadesCriancas', 0, 17, 'Criança');
+            if (chave === 'idosos') renderizarIdades('idosos', 'idadesIdosos', 60, 100, 'Pessoa 60+');
+
+            atualizarResumoPassageiros();
+        }
+
+        function renderizarIdades(chave, containerId, idadeMin, idadeMax, rotulo) {
+            const container = document.getElementById(containerId);
+            const qtd = contadores[chave];
+            const opcoes = [];
+            for (let i = idadeMin; i <= idadeMax; i++) opcoes.push(`<option value="${i}">${i} anos</option>`);
+
+            let html = '';
+            for (let i = 1; i <= qtd; i++) {
+                html += `
+                    <div class="idade-row">
+                        <label for="idade-${chave}-${i}">${rotulo} ${i} — idade</label>
+                        <select id="idade-${chave}-${i}">
+                            <option value="">Idade</option>
+                            ${opcoes.join('')}
+                        </select>
+                    </div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function atualizarResumoPassageiros() {
+            const partes = [];
+            const totalPessoas = contadores.adultos + contadores.criancas + contadores.idosos;
+            partes.push(`${totalPessoas} ${totalPessoas === 1 ? 'pessoa' : 'pessoas'}`);
+            partes.push(`${contadores.quartos} ${contadores.quartos === 1 ? 'quarto' : 'quartos'}`);
+            document.getElementById('passageirosResumo').textContent = partes.join(' · ');
+        }
+
+        /**
+         * Coleta as idades preenchidas (criança/60+). Retorna null se alguma faltar.
+         */
+        function coletarIdades(chave) {
+            const idades = [];
+            for (let i = 1; i <= contadores[chave]; i++) {
+                const select = document.getElementById(`idade-${chave}-${i}`);
+                if (!select || !select.value) return null;
+                idades.push(select.value);
+            }
+            return idades;
+        }
+
+        /**
+         * ===================== BUSCAR: NÃO HÁ MOTOR DE BUSCA PRÓPRIO =====================
+         * A Voe Mais funciona por curadoria + WhatsApp, não por inventário próprio de voos/hotéis
+         * (ver Art. 5 da Constituição — automação de busca é decisão adiada). Então "Buscar" aqui
+         * nunca finge mostrar resultado: ele sempre abre o modal de cotação com o que foi preenchido.
+         */
+        let buscaAtual = null;
+
+        function processarBusca(event) {
             event.preventDefault();
-            
-            const destino = document.getElementById('destino').value;
-            const dataSaida = document.getElementById('data-saida').value;
-            const passageiros = document.getElementById('passageiros').value;
-            
-            const mensagem = `Olá! Gostaria de receber ofertas para:\n- Destino: ${destino}\n- Data: ${dataSaida}\n- Passageiros: ${passageiros}`;
-            
-            abrirWhatsApp('');
-            console.log('Busca enviada:', { destino, dataSaida, passageiros });
+
+            const destino = document.getElementById('destino').value.trim();
+            const dataIda = document.getElementById('data-ida').value;
+            if (!destino) {
+                alert('Preenche o destino antes de buscar.');
+                return false;
+            }
+            if (!dataIda) {
+                alert('Preenche a data de ida antes de buscar.');
+                return false;
+            }
+
+            const idadesCriancas = coletarIdades('criancas');
+            if (idadesCriancas === null) {
+                alert('Falta informar a idade de uma ou mais crianças.');
+                return false;
+            }
+
+            const idadesIdosos = coletarIdades('idosos');
+            if (idadesIdosos === null) {
+                alert('Falta informar a idade de uma ou mais pessoas 60+.');
+                return false;
+            }
+
+            const somenteIda = document.getElementById('somenteIda').checked;
+            const dataVolta = document.getElementById('data-volta').value;
+            if (!somenteIda && !dataVolta) {
+                alert('Informe a data de volta ou marque "Só ida".');
+                return false;
+            }
+
+            buscaAtual = {
+                destino: document.getElementById('destino').value,
+                dataIda: document.getElementById('data-ida').value,
+                dataVolta: somenteIda ? null : dataVolta,
+                adultos: contadores.adultos,
+                criancas: contadores.criancas,
+                idadesCriancas,
+                idosos: contadores.idosos,
+                idadesIdosos,
+                quartos: contadores.quartos,
+            };
+
+            abrirModalCotacao();
+            return false;
+        }
+
+        function abrirModalCotacao() {
+            document.getElementById('modalCotacao').style.display = 'flex';
+        }
+
+        function fecharModalCotacao() {
+            document.getElementById('modalCotacao').style.display = 'none';
+        }
+
+        function enviarCotacao(event) {
+            event.preventDefault();
+
+            if (!buscaAtual) {
+                fecharModalCotacao();
+                return false;
+            }
+
+            const perfil = document.getElementById('perfilViagem').value;
+            const querSeguro = document.getElementById('querSeguro').checked;
+            const querTransfer = document.getElementById('querTransfer').checked;
+            const email = document.getElementById('emailContato').value;
+            const telefone = document.getElementById('telefoneContato').value;
+            const canal = document.getElementById('canalContato').value;
+
+            const linhasPassageiros = [`${buscaAtual.adultos} adulto(s)`];
+            if (buscaAtual.criancas > 0) {
+                linhasPassageiros.push(`${buscaAtual.criancas} criança(s) (idades: ${buscaAtual.idadesCriancas.join(', ')})`);
+            }
+            if (buscaAtual.idosos > 0) {
+                linhasPassageiros.push(`${buscaAtual.idosos} pessoa(s) 60+ (idades: ${buscaAtual.idadesIdosos.join(', ')})`);
+            }
+
+            const mensagem = [
+                'Olá! Vim pelo site e não achei pacote pronto pra essa configuração — quero cotação:',
+                `- Destino: ${buscaAtual.destino}`,
+                `- Ida: ${buscaAtual.dataIda}${buscaAtual.dataVolta ? ` | Volta: ${buscaAtual.dataVolta}` : ' | Somente ida'}`,
+                `- Passageiros: ${linhasPassageiros.join(' + ')}`,
+                `- Quartos: ${buscaAtual.quartos}`,
+                `- Perfil de viagem: ${perfil}`,
+                `- Seguro viagem: ${querSeguro ? 'Sim' : 'Não'}`,
+                `- Transfer: ${querTransfer ? 'Sim' : 'Não'}`,
+                `- E-mail: ${email}`,
+                `- Telefone: ${telefone}`,
+                `- Prefere ser atendido por: ${canal}`,
+            ].join('\n');
+
+            abrirWhatsApp('', mensagem);
+            fecharModalCotacao();
+            return false;
         }
 
         /**
@@ -1412,7 +2215,134 @@
             cards.forEach((card, index) => {
                 card.style.animation = `fadeInUp 0.6s ease-out ${0.1 * (index + 1)}s both`;
             });
+
+            carregarOfertasSemana();
+            carregarGaleriasDestinos();
+            adicionarAvisoDisponibilidade();
+            carregarListaDestinos();
+            atualizarResumoPassageiros();
+
+            const hoje = new Date().toISOString().slice(0, 10);
+            document.getElementById('data-ida').min = hoje;
+            document.getElementById('data-volta').min = hoje;
         });
+
+        /**
+         * Adiciona o aviso "sujeito a disponibilidade" logo abaixo do preço
+         * de cada pacote. Roda em todo .pacote-preco existente na página —
+         * se você adicionar um card novo depois, o aviso aparece sozinho,
+         * sem precisar lembrar de colar o texto de novo.
+         */
+        function adicionarAvisoDisponibilidade() {
+            document.querySelectorAll('.pacote-preco').forEach(preco => {
+                const aviso = document.createElement('p');
+                aviso.className = 'pacote-preco-aviso';
+                aviso.innerHTML = '⚠️ Preço sujeito a disponibilidade no momento do fechamento';
+                preco.insertAdjacentElement('afterend', aviso);
+            });
+        }
+
+        /**
+         * Lê destinos.json e, pra cada card de pacote que tiver uma galeria
+         * cadastrada, adiciona o botão "Ver fotos". Card sem entrada no JSON
+         * (ou com galeria vazia) simplesmente não ganha o botão — nada quebra.
+         */
+        async function carregarGaleriasDestinos() {
+            try {
+                const resposta = await fetch('destinos.json', { cache: 'no-store' });
+                if (!resposta.ok) return;
+
+                const destinos = await resposta.json();
+
+                document.querySelectorAll('.pacote-image-wrap').forEach(wrap => {
+                    const foto = wrap.querySelector('.pacote-foto');
+                    if (!foto) return;
+
+                    const match = foto.getAttribute('src').match(/([^/]+)\.jpg$/i);
+                    if (!match) return;
+
+                    const slug = match[1];
+                    const destino = destinos[slug];
+                    if (!destino || !destino.galeria || destino.galeria.length === 0) return;
+
+                    const botao = document.createElement('button');
+                    botao.type = 'button';
+                    botao.className = 'btn-ver-fotos';
+                    botao.textContent = '📷 Ver fotos';
+                    botao.onclick = (evento) => {
+                        evento.stopPropagation();
+                        abrirGaleria(destino.galeria, destino.nome || slug);
+                    };
+                    wrap.appendChild(botao);
+                });
+            } catch (erro) {
+                console.log('Galeria de destinos indisponível:', erro);
+            }
+        }
+
+        let galeriaAtual = [];
+        let galeriaIndex = 0;
+
+        function abrirGaleria(fotos, nomeDestino) {
+            galeriaAtual = fotos;
+            galeriaIndex = 0;
+            document.getElementById('lightbox-titulo').textContent = nomeDestino;
+            atualizarLightbox();
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function atualizarLightbox() {
+            document.getElementById('lightbox-img').src = galeriaAtual[galeriaIndex];
+            document.getElementById('lightbox-contador').textContent =
+                `${galeriaIndex + 1} / ${galeriaAtual.length}`;
+        }
+
+        function navegarLightbox(direcao) {
+            galeriaIndex = (galeriaIndex + direcao + galeriaAtual.length) % galeriaAtual.length;
+            atualizarLightbox();
+        }
+
+        function fecharLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        /**
+         * Busca ofertas.json, filtra as que ainda estão dentro da validade
+         * e monta os cards em #ofertas-semana. Se não houver nenhuma oferta
+         * ativa (ou o arquivo não existir), a seção fica oculta.
+         */
+        async function carregarOfertasSemana() {
+            const secao = document.getElementById('ofertas-semana');
+            const grid = document.getElementById('ofertas-semana-grid');
+
+            try {
+                const resposta = await fetch('ofertas.json', { cache: 'no-store' });
+                if (!resposta.ok) return;
+
+                const ofertas = await resposta.json();
+                const hoje = new Date().toISOString().slice(0, 10);
+                const ativas = ofertas.filter(oferta => oferta.validade >= hoje);
+
+                if (ativas.length === 0) return;
+
+                grid.innerHTML = ativas.map(oferta => `
+                    <div class="oferta-card">
+                        <div class="oferta-foto-wrap">
+                            <img src="${oferta.feed}" alt="Oferta ${oferta.destino}" class="oferta-foto" loading="lazy">
+                        </div>
+                        <div class="oferta-cta">
+                            <button class="pacote-btn" onclick="selecionarPacote('Oferta da semana - ${oferta.destino}')">
+                                Quero essa oferta
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                secao.style.display = 'block';
+            } catch (erro) {
+                console.log('Ofertas da semana indisponíveis:', erro);
+            }
+        }
     </script>
 </body>
 </html>
