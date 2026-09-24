@@ -1,0 +1,22 @@
+{
+  "rio-de-janeiro": { "nome": "Rio de Janeiro", "galeria": ["images/destinos/rio-de-janeiro/01.jpg"] },
+  "salvador": { "nome": "Salvador", "galeria": ["images/destinos/salvador/01.jpg"] },
+  "natal": { "nome": "Natal", "galeria": ["images/destinos/natal/01.jpg"] },
+  "florianopolis": { "nome": "Florianópolis", "galeria": ["images/destinos/florianopolis/01.jpg"] },
+  "gramado-e-canela": { "nome": "Gramado & Canela", "galeria": ["images/destinos/gramado-e-canela/01.jpg"] },
+  "brasilia": { "nome": "Brasília", "galeria": ["images/destinos/brasilia/01.jpg"] },
+  "santiago-do-chile": { "nome": "Santiago do Chile", "galeria": ["images/destinos/santiago-do-chile/01.jpg"] },
+  "buenos-aires": { "nome": "Buenos Aires", "galeria": ["images/destinos/buenos-aires/01.jpg"] },
+  "cusco-e-machu-picchu": { "nome": "Cusco & Machu Picchu", "galeria": ["images/destinos/cusco-e-machu-picchu/01.jpg"] },
+  "cartagena": { "nome": "Cartagena", "galeria": ["images/destinos/cartagena/01.jpg"] },
+  "riviera-maia": { "nome": "Riviera Maia", "galeria": ["images/destinos/riviera-maia/01.jpg"] },
+  "orlando": { "nome": "Orlando", "galeria": [] },
+
+  "porto-de-galinhas": { "nome": "Porto de Galinhas", "galeria": ["images/destinos/porto-de-galinhas/01.jpg"] },
+  "fortaleza": { "nome": "Fortaleza", "galeria": ["images/destinos/fortaleza/01.jpg"] },
+  "porto-seguro": { "nome": "Porto Seguro", "galeria": ["images/destinos/porto-seguro/01.jpg"] },
+  "foz-do-iguacu": { "nome": "Foz do Iguaçu", "galeria": ["images/destinos/foz-do-iguacu/01.jpg"] },
+  "curitiba": { "nome": "Curitiba", "galeria": ["images/destinos/curitiba/01.jpg"] },
+  "porto-alegre": { "nome": "Porto Alegre", "galeria": ["images/destinos/porto-alegre/01.jpg"] },
+  "sao-paulo": { "nome": "São Paulo", "galeria": ["images/destinos/sao-paulo/01.jpg"] }
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "destino": "Porto Seguro",
+    "feed": "banners/porto-seguro/feed.jpg",
+    "stories": "banners/porto-seguro/stories.jpg",
+    "validade": "2026-10-17"
+  },
+  {
+    "destino": "Aracaju",
+    "feed": "banners/aracaju/feed.jpg",
+    "stories": "banners/aracaju/stories.jpg",
+    "validade": "2026-12-03"
+  },
+  {
+    "destino": "Chile",
+    "feed": "banners/chile/feed.jpg",
+    "stories": "banners/chile/stories.jpg",
+    "validade": "2026-10-06"
+  }
+]
