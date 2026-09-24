@@ -1,0 +1,23 @@
+# Segredos e credenciais - NUNCA versionar
+.env
+*.env
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa*
+id_ed25519*
+*.token
+
+# Lixo de sistema / temporarios
+Thumbs.db
+desktop.ini
+.DS_Store
+*.bak
+*.tmp
+*.log
+__pycache__/
+
+# Configuracao local do Claude Code (pode conter caminhos/permissoes pessoais)
+CLAUDE.local.md
+.claude/settings.local.json

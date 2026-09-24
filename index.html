@@ -2,6 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <!-- SEGURANCA: politica de conteudo (limita de onde o site pode carregar scripts/imagens/dados).
+         Regras completas: secao SEGURANCA de 01_CONTEXTO/PROMPT_CLAUDE_CODE.md. NAO afrouxe sem autorizacao do Josimar. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Voe Mais Viagens - Suas férias perfeitas para família e casais. Pacotes customizados com as melhores experiências.">
     <meta name="keywords" content="viagens, turismo, pacotes, família, casais, Belo Horizonte">
@@ -479,7 +483,7 @@
            OFERTAS DA SEMANA (banners reais da Cativa)
            ============================================ */
         #ofertas-semana {
-            display: none; /* só aparece via JS quando há oferta com validade ativa */
+            display: none; /* só aparece via JS quando há pelo menos uma oferta ativa */
         }
 
         .oferta-card {
@@ -817,7 +821,9 @@
            MODAL DE COTAÇÃO
            ============================================ */
         .modal-cotacao-conteudo {
-            max-width: 480px;
+            max-width: 700px;
+            max-height: 92vh;
+            overflow-y: auto;
             text-align: left;
         }
 
@@ -832,14 +838,164 @@
             margin: 0.5rem 0 1.25rem;
         }
 
+        .modal-cotacao-conteudo [hidden] {
+            display: none !important;
+        }
+
+        .cot-secao {
+            border: 1px solid var(--cinza-suave);
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem 0.4rem;
+            margin: 0 0 1rem;
+            min-width: 0;
+        }
+
+        .cot-secao legend {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--azul-principal);
+            padding: 0 0.4rem;
+        }
+
+        .cot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 1rem;
+        }
+
+        .cot-checks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1rem;
+        }
+
+        .cot-rotulo {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--cinza-texto);
+        }
+
+        .cot-espaco {
+            margin-bottom: 1rem;
+        }
+
         .modal-cotacao-conteudo .form-group {
             margin-bottom: 1rem;
         }
 
-        .checkbox-row {
+        .modal-cotacao-conteudo input[type="text"],
+        .modal-cotacao-conteudo input[type="tel"],
+        .modal-cotacao-conteudo input[type="email"],
+        .modal-cotacao-conteudo input[type="date"],
+        .modal-cotacao-conteudo select,
+        .modal-cotacao-conteudo textarea {
+            width: 100%;
+            padding: 0.7rem 0.8rem;
+            border: 2px solid var(--cinza-suave);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: var(--font-principal);
+            background: white;
+        }
+
+        .modal-cotacao-conteudo input:focus,
+        .modal-cotacao-conteudo select:focus,
+        .modal-cotacao-conteudo textarea:focus {
+            outline: none;
+            border-color: var(--azul-principal);
+            box-shadow: 0 0 0 3px rgba(31, 75, 255, 0.1);
+        }
+
+        .cot-resumo {
+            margin: 0.2rem 0 0.4rem;
+            font-weight: 600;
+            color: var(--cinza-texto);
+        }
+
+        .cot-dica {
+            font-size: 0.8rem;
+            color: #5b6472;
+        }
+
+        .link-botao {
+            background: none;
+            border: none;
+            padding: 0 0 0.8rem;
+            color: var(--azul-principal);
+            font-size: 0.9rem;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .cot-consentimento {
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .cot-consentimento input {
+            margin-top: 0.2rem;
+        }
+
+        .cot-hp {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .cot-erro {
+            background: #fdecea;
+            color: #a12a1f;
+            border-left: 3px solid #d93025;
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            margin: 0 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .cot-fallback {
+            width: 100%;
+            margin-bottom: 0.75rem;
+        }
+
+        .cot-sucesso {
+            text-align: center;
+            padding: 1rem 0 0.5rem;
+        }
+
+        .cot-sucesso h3 {
+            text-align: center;
+            padding-right: 0;
+        }
+
+        .cot-protocolo {
+            color: var(--cinza-texto);
+        }
+
+        .autocomplete-item {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .autocomplete-tag {
+            font-size: 0.75rem;
+            color: #5b6472;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            .cot-grid,
+            .cot-checks {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-cotacao-conteudo {
+                max-height: 96vh;
+            }
         }
 
         .modal-cotacao-btn {
@@ -897,17 +1053,22 @@
         }
 
         .pacote-preco-aviso {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
             font-size: 0.8rem;
-            color: #b26a00;
-            background: #fff4e5;
-            border-left: 3px solid var(--destaque);
+            line-height: 1.4;
+            color: #5b6472;
+            background: var(--cinza-claro);
+            border-left: 3px solid var(--azul-claro);
             padding: 0.5rem 0.75rem;
             border-radius: 6px;
             margin-top: -0.5rem;
             margin-bottom: 1.5rem;
+        }
+
+        .ofertas-aviso {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #5b6472;
+            margin-top: 1.5rem;
         }
 
         .pacote-features {
@@ -1103,7 +1264,7 @@
                 <a href="#pacotes">Pacotes</a>
                 <a href="#sobre">Sobre</a>
                 <a href="#faq">FAQ</a>
-                <a href="https://www.instagram.com/travelvoemais?igsh=MXJuMjZscTJ3dDVjYQ==" target="_blank">Instagram</a>
+                <a href="https://www.instagram.com/travelvoemais?igsh=MXJuMjZscTJ3dDVjYQ==" target="_blank" rel="noopener noreferrer">Instagram</a>
                 <button class="btn-whatsapp" onclick="abrirWhatsApp()">
                     💬 Fale Conosco
                 </button>
@@ -1123,7 +1284,7 @@
                 <form class="search-form" id="formBusca" onsubmit="return processarBusca(event)">
                     <div class="form-group form-group-destino">
                         <label for="destino">Destino</label>
-                        <input type="text" id="destino" placeholder="Para onde viajar?" autocomplete="off" oninput="filtrarAutocompleteDestino()">
+                        <input type="text" id="destino" placeholder="Para onde viajar?" autocomplete="off">
                         <div class="autocomplete-lista" id="destinoLista"></div>
                     </div>
 
@@ -1218,9 +1379,10 @@
     <section id="ofertas-semana">
         <div class="section-title">
             <h2>🔥 Ofertas da Semana</h2>
-            <p>Voo, hotel e preço reais — sujeitos a disponibilidade</p>
+            <p>Voo, hotel e preço reais, com a validade indicada em cada oferta</p>
         </div>
         <div class="pacotes-grid" id="ofertas-semana-grid"></div>
+        <p class="ofertas-aviso" id="ofertas-aviso"></p>
     </section>
 
     <!-- ============ PACOTES ============ -->
@@ -1830,8 +1992,8 @@
 
             <div class="footer-section">
                 <h4>Redes Sociais</h4>
-                <a href="https://www.instagram.com/travelvoemais?igsh=MXJuMjZscTJ3dDVjYQ==" target="_blank">📸 Instagram</a>
-                <a href="https://wa.me/5531983097640" target="_blank">💬 WhatsApp</a>
+                <a href="https://www.instagram.com/travelvoemais?igsh=MXJuMjZscTJ3dDVjYQ==" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+                <a href="https://wa.me/5531983097640" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
             </div>
 
             <div class="footer-section">
@@ -1844,8 +2006,8 @@
 
             <div class="footer-section">
                 <h4>Contato</h4>
-                <p>📞 WhatsApp: <a href="https://wa.me/5531983097640" target="_blank">(31) 9 8309-7640</a></p>
-                <p>📞 Suporte: <a href="https://wa.me/5531983002955" target="_blank">(31) 9 8300-2955</a></p>
+                <p>📞 WhatsApp: <a href="https://wa.me/5531983097640" target="_blank" rel="noopener noreferrer">(31) 9 8309-7640</a></p>
+                <p>📞 Suporte: <a href="https://wa.me/5531983002955" target="_blank" rel="noopener noreferrer">(31) 9 8300-2955</a></p>
                 <p>✉️ <a href="mailto:travel.voemais@gmail.com">travel.voemais@gmail.com</a></p>
                 <p>🕐 Seg-Dom: 8h às 18h</p>
             </div>
@@ -1870,61 +2032,234 @@
         </div>
     </div>
 
-    <!-- ============ MODAL DE COTAÇÃO (quando não há pacote pré-montado) ============ -->
-    <div id="modalCotacao" class="lightbox" onclick="fecharModalCotacao()">
-        <div class="lightbox-conteudo modal-cotacao-conteudo" onclick="event.stopPropagation()">
-            <button class="lightbox-fechar" onclick="fecharModalCotacao()">✕</button>
-            <h3>Ainda não temos um pacote pronto com essa configuração</h3>
-            <p class="modal-cotacao-intro">Sem problema — complete os dados abaixo que te mandamos uma cotação personalizada:</p>
-            <form id="formCotacao" onsubmit="return enviarCotacao(event)">
-                <div class="form-group">
-                    <label for="perfilViagem">Me proponha! Qual o seu perfil de viagem?</label>
-                    <select id="perfilViagem" required>
-                        <option value="">Selecionar</option>
-                        <option value="Praia e relax">Praia e relax</option>
-                        <option value="Aventura">Aventura</option>
-                        <option value="Cultura e cidade">Cultura e cidade</option>
-                        <option value="Lua de mel / romântico">Lua de mel / romântico</option>
-                        <option value="Em família">Em família</option>
-                        <option value="Luxo">Luxo</option>
-                        <option value="Econômico">Econômico</option>
-                        <option value="Me proponha! (vocês escolhem por mim)">Me proponha! (vocês escolhem por mim)</option>
-                    </select>
-                </div>
+    <!-- ============ MODAL DE COTAÇÃO (coleta os dados para o orçamento) ============ -->
+    <div id="modalCotacao" class="lightbox" role="dialog" aria-modal="true" aria-labelledby="cotacaoTitulo" aria-hidden="true">
+        <div class="lightbox-conteudo modal-cotacao-conteudo" id="cotacaoConteudo">
+            <button type="button" class="lightbox-fechar" id="cotacaoFechar" aria-label="Fechar">✕</button>
+            <h3 id="cotacaoTitulo">Vamos montar a sua cotação</h3>
+            <p class="modal-cotacao-intro">Confira os dados da viagem e complete o que faltar. Quanto mais detalhes, mais precisa a nossa proposta.</p>
 
-                <div class="form-group checkbox-row">
-                    <label class="checkbox-inline"><input type="checkbox" id="querSeguro"> Quero seguro viagem</label>
-                    <label class="checkbox-inline"><input type="checkbox" id="querTransfer"> Quero transfer aeroporto/hotel</label>
-                </div>
+            <form id="formCotacao" novalidate>
+                <fieldset class="cot-secao">
+                    <legend>Sua viagem</legend>
+                    <div class="cot-grid">
+                        <div class="form-group form-group-destino">
+                            <label for="cot-origem">Saindo de *</label>
+                            <input type="text" id="cot-origem" maxlength="80" placeholder="Cidade ou aeroporto de saída" autocomplete="off">
+                            <div class="autocomplete-lista" id="cot-origem-lista"></div>
+                        </div>
+                        <div class="form-group form-group-destino">
+                            <label for="cot-destino">Destino *</label>
+                            <input type="text" id="cot-destino" maxlength="80" placeholder="Para onde viajar?" autocomplete="off">
+                            <div class="autocomplete-lista" id="cot-destino-lista"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cot-ida">Ida *</label>
+                            <input type="date" id="cot-ida">
+                        </div>
+                        <div class="form-group" id="cot-grupo-volta">
+                            <label for="cot-volta">Volta *</label>
+                            <input type="date" id="cot-volta">
+                        </div>
+                    </div>
+                    <label class="checkbox-inline cot-espaco"><input type="checkbox" id="cot-somente-ida"> Só ida (sem volta)</label>
+                    <div class="form-group">
+                        <label for="cot-flex">Flexibilidade das datas</label>
+                        <select id="cot-flex">
+                            <option value="Datas fixas">Datas fixas</option>
+                            <option value="Flexível ± 3 dias">Flexível ± 3 dias</option>
+                            <option value="Flexível ± 1 semana">Flexível ± 1 semana</option>
+                            <option value="Flexível no mês">Flexível no mês</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <span class="cot-rotulo">O que você quer cotar? *</span>
+                        <div class="cot-checks" id="cot-bloco-servicos">
+                            <label class="checkbox-inline"><input type="checkbox" name="cot-servico" value="Passagem aérea" checked> Passagem aérea</label>
+                            <label class="checkbox-inline"><input type="checkbox" name="cot-servico" value="Hospedagem" checked> Hospedagem</label>
+                            <label class="checkbox-inline"><input type="checkbox" name="cot-servico" value="Seguro viagem"> Seguro viagem</label>
+                            <label class="checkbox-inline"><input type="checkbox" name="cot-servico" value="Transfer aeroporto/hotel"> Transfer aeroporto/hotel</label>
+                            <label class="checkbox-inline"><input type="checkbox" name="cot-servico" value="Passeios e ingressos"> Passeios e ingressos</label>
+                            <label class="checkbox-inline"><input type="checkbox" name="cot-servico" value="Aluguel de carro"> Aluguel de carro</label>
+                        </div>
+                    </div>
+                </fieldset>
 
-                <div class="form-group">
-                    <label for="emailContato">E-mail</label>
-                    <input type="email" id="emailContato" required>
-                </div>
+                <fieldset class="cot-secao">
+                    <legend>Quem viaja</legend>
+                    <p class="cot-resumo" id="cot-viajantes"></p>
+                    <button type="button" class="link-botao" id="cot-alterar-viajantes">Alterar passageiros e quartos</button>
+                </fieldset>
 
-                <div class="form-group">
-                    <label for="telefoneContato">Telefone / WhatsApp</label>
-                    <input type="tel" id="telefoneContato" placeholder="(31) 9XXXX-XXXX" required>
-                </div>
+                <fieldset class="cot-secao">
+                    <legend>Preferências</legend>
+                    <div class="cot-grid">
+                        <div class="form-group">
+                            <label for="cot-perfil">Perfil da viagem *</label>
+                            <select id="cot-perfil">
+                                <option value="">Selecionar</option>
+                                <option value="Praia e relax">Praia e relax</option>
+                                <option value="Aventura">Aventura</option>
+                                <option value="Cultura e cidade">Cultura e cidade</option>
+                                <option value="Lua de mel / romântico">Lua de mel / romântico</option>
+                                <option value="Em família">Em família</option>
+                                <option value="Luxo">Luxo</option>
+                                <option value="Econômico">Econômico</option>
+                                <option value="Me proponha! (vocês escolhem por mim)">Me proponha! (vocês escolhem por mim)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cot-orcamento">Orçamento total aproximado</label>
+                            <select id="cot-orcamento">
+                                <option value="">Prefiro não informar agora</option>
+                                <option value="Até R$ 3.000">Até R$ 3.000</option>
+                                <option value="R$ 3.000 a R$ 6.000">R$ 3.000 a R$ 6.000</option>
+                                <option value="R$ 6.000 a R$ 10.000">R$ 6.000 a R$ 10.000</option>
+                                <option value="R$ 10.000 a R$ 20.000">R$ 10.000 a R$ 20.000</option>
+                                <option value="Acima de R$ 20.000">Acima de R$ 20.000</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="cot-grid" id="cot-bloco-hotel">
+                        <div class="form-group">
+                            <label for="cot-hotel">Categoria do hotel</label>
+                            <select id="cot-hotel">
+                                <option value="Sem preferência">Sem preferência</option>
+                                <option value="Econômica (até 3 estrelas)">Econômica (até 3 estrelas)</option>
+                                <option value="Confortável (4 estrelas)">Confortável (4 estrelas)</option>
+                                <option value="Superior (5 estrelas)">Superior (5 estrelas)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cot-regime">Alimentação</label>
+                            <select id="cot-regime">
+                                <option value="Sem preferência">Sem preferência</option>
+                                <option value="Só hospedagem">Só hospedagem</option>
+                                <option value="Café da manhã">Café da manhã</option>
+                                <option value="Meia pensão">Meia pensão</option>
+                                <option value="Pensão completa / All inclusive">Pensão completa / All inclusive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="cot-grid" id="cot-bloco-aereo">
+                        <div class="form-group">
+                            <label for="cot-bagagem">Bagagem</label>
+                            <select id="cot-bagagem">
+                                <option value="Ainda não sei">Ainda não sei</option>
+                                <option value="Com bagagem despachada">Com bagagem despachada</option>
+                                <option value="Só bagagem de mão">Só bagagem de mão</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cot-voo">Preferência de voo</label>
+                            <select id="cot-voo">
+                                <option value="Tanto faz">Tanto faz</option>
+                                <option value="Menor preço">Menor preço</option>
+                                <option value="Menos escalas / voo direto">Menos escalas / voo direto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="cot-bloco-passaporte">
+                        <label for="cot-passaporte">Passaporte (para viagem internacional)</label>
+                        <select id="cot-passaporte">
+                            <option value="Não sei">Não sei</option>
+                            <option value="Todos têm passaporte válido">Todos têm passaporte válido</option>
+                            <option value="Alguns não têm">Alguns não têm</option>
+                            <option value="Ninguém tem">Ninguém tem</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cot-obs">Observações</label>
+                        <textarea id="cot-obs" rows="3" maxlength="500" placeholder="Ex.: comemoração, hotel de preferência, atrações que não podem faltar"></textarea>
+                        <span class="cot-dica">Não informe dados de saúde, documentos ou cartão.</span>
+                    </div>
+                </fieldset>
 
-                <div class="form-group">
-                    <label for="canalContato">Como prefere ser atendido?</label>
-                    <select id="canalContato" required>
-                        <option value="">Selecionar</option>
-                        <option value="WhatsApp">WhatsApp</option>
-                        <option value="E-mail">E-mail</option>
-                        <option value="Ligação">Ligação (voz)</option>
-                        <option value="Mensagem de texto">Mensagem de texto (SMS)</option>
-                    </select>
-                </div>
+                <fieldset class="cot-secao">
+                    <legend>Seus dados</legend>
+                    <div class="form-group">
+                        <label for="cot-nome">Nome completo *</label>
+                        <input type="text" id="cot-nome" maxlength="80" autocomplete="name">
+                    </div>
+                    <div class="cot-grid">
+                        <div class="form-group">
+                            <label for="cot-telefone">WhatsApp / telefone *</label>
+                            <input type="tel" id="cot-telefone" maxlength="20" placeholder="(31) 9XXXX-XXXX" autocomplete="tel" inputmode="tel">
+                        </div>
+                        <div class="form-group">
+                            <label for="cot-email">E-mail *</label>
+                            <input type="email" id="cot-email" maxlength="120" autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="cot-canal">Como prefere ser atendido? *</label>
+                            <select id="cot-canal">
+                                <option value="">Selecionar</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="E-mail">E-mail</option>
+                                <option value="Ligação">Ligação (voz)</option>
+                                <option value="Mensagem de texto">Mensagem de texto (SMS)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cot-horario">Melhor horário para contato</label>
+                            <select id="cot-horario">
+                                <option value="Qualquer horário">Qualquer horário</option>
+                                <option value="Manhã">Manhã</option>
+                                <option value="Tarde">Tarde</option>
+                                <option value="Noite">Noite</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cot-conheceu">Como conheceu a Voe Mais?</label>
+                        <select id="cot-conheceu">
+                            <option value="">Prefiro não informar</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Indicação de amigo ou família">Indicação de amigo ou família</option>
+                            <option value="Google">Google</option>
+                            <option value="Já sou cliente">Já sou cliente</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="cot-hp" aria-hidden="true">
+                        <label for="cot-site">Deixe este campo vazio</label>
+                        <input type="text" id="cot-site" tabindex="-1" autocomplete="off">
+                    </div>
+                    <label class="checkbox-inline cot-consentimento">
+                        <input type="checkbox" id="cot-consentimento">
+                        <span>Autorizo a Voe Mais a usar estes dados para preparar e enviar a minha cotação e entrar em contato. Os dados são repassados à nossa equipe por mensagem, e posso pedir a exclusão quando quiser. <a href="#politica" id="cot-link-politica">Política de privacidade</a></span>
+                    </label>
+                </fieldset>
 
-                <button type="submit" class="search-btn modal-cotacao-btn">Enviar para cotação</button>
+                <p class="cot-erro" id="cot-erro" role="alert" hidden></p>
+                <button type="button" class="pacote-btn cot-fallback" id="cot-fallback" hidden>Enviar esta solicitação pelo WhatsApp</button>
+                <button type="submit" class="search-btn modal-cotacao-btn" id="cot-enviar">Enviar para cotação</button>
             </form>
+
+            <div class="cot-sucesso" id="cot-sucesso" hidden>
+                <h3>Recebemos o seu pedido!</h3>
+                <p id="cot-sucesso-texto"></p>
+                <p class="cot-protocolo" id="cot-protocolo-linha" hidden>Protocolo: <strong id="cot-protocolo"></strong></p>
+                <button type="button" class="pacote-btn" id="cot-sucesso-whats">Falar agora no WhatsApp</button>
+                <button type="button" class="link-botao" id="cot-sucesso-fechar">Fechar</button>
+            </div>
         </div>
     </div>
 
     <!-- ============ SCRIPT ============ -->
     <script>
+        /**
+         * SEGURANCA: so aceita imagens locais em images/ ou banners/ (jpg, png, webp), sem "..".
+         * Todo caminho vindo de destinos.json / ofertas.json passa por aqui antes de virar <img>.
+         */
+        /** Aviso comercial exibido nos cards de pacote e na seção Ofertas da Semana. Altere o texto SO aqui. */
+        const AVISO_DISPONIBILIDADE = 'Valores sujeitos à disponibilidade e confirmação no momento da reserva.';
+
+        const CAMINHO_IMAGEM_SEGURO = /^(images|banners)\/[A-Za-z0-9_\/.-]+\.(jpe?g|png|webp)$/i;
+        function caminhoImagemSeguro(caminho) {
+            return typeof caminho === 'string' && CAMINHO_IMAGEM_SEGURO.test(caminho) && caminho.indexOf('..') === -1;
+        }
+
         /**
          * Abre o WhatsApp com uma mensagem pré-definida
          * @param {string} pacote - Nome do pacote selecionado
@@ -1939,7 +2274,7 @@
                     : `Olá! Gostaria de conhecer os pacotes de viagem da Voe Mais e receber um orçamento.`);
 
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-            window.open(url, '_blank');
+            window.open(url, '_blank', 'noopener,noreferrer');
         }
 
         /**
@@ -1955,60 +2290,328 @@
          */
         const contadores = { adultos: 2, criancas: 0, idosos: 0, quartos: 1 };
         const LIMITES = { adultos: [1, 9], criancas: [0, 6], idosos: [0, 6], quartos: [1, 5] };
-        let listaDestinos = [];
+        /**
+         * ===================== CATÁLOGO DE DESTINOS E ORIGENS (autocomplete) =====================
+         * Cada linha: 'Nome exibido|tipo|apelidos para busca|slug do destinos.json (opcional)'
+         * tipo: n = Brasil, i = Internacional. A busca ignora acento e maiúscula e também acha pelos apelidos.
+         * Para incluir um destino novo, acrescente uma linha aqui.
+         */
+        const CATALOGO_DESTINOS_BASE = [
+            'Rio de Janeiro (RJ)|n|rio cristo redentor copacabana ipanema|rio-de-janeiro',
+            'Búzios (RJ)|n|buzios cabo frio|',
+            'Arraial do Cabo (RJ)|n|cabo frio|',
+            'Angra dos Reis (RJ)|n|ilha grande|',
+            'Paraty (RJ)|n|parati|',
+            'Petrópolis (RJ)|n|serra|',
+            'São Paulo (SP)|n|sampa|sao-paulo',
+            'Campos do Jordão (SP)|n|serra da mantiqueira|',
+            'Ubatuba (SP)|n|litoral norte|',
+            'Ilhabela (SP)|n|litoral norte|',
+            'Gramado (RS)|n|serra gaucha natal luz|gramado-e-canela',
+            'Canela (RS)|n|serra gaucha|',
+            'Bento Gonçalves (RS)|n|vale dos vinhedos vinicolas|',
+            'Porto Alegre (RS)|n|poa|porto-alegre',
+            'Florianópolis (SC)|n|floripa ilha da magia|florianopolis',
+            'Balneário Camboriú (SC)|n|bc camboriu|',
+            'Bombinhas (SC)|n||',
+            'Blumenau (SC)|n|oktoberfest|',
+            'Penha (SC)|n|beto carrero|',
+            'Curitiba (PR)|n|cwb|curitiba',
+            'Foz do Iguaçu (PR)|n|cataratas iguacu|foz-do-iguacu',
+            'Salvador (BA)|n|ssa pelourinho|salvador',
+            'Porto Seguro (BA)|n|arraial d ajuda trancoso|porto-seguro',
+            "Arraial d'Ajuda (BA)|n|porto seguro|",
+            'Trancoso (BA)|n|porto seguro|',
+            'Morro de São Paulo (BA)|n|boipeba|',
+            'Praia do Forte (BA)|n|costa dos coqueiros|',
+            'Itacaré (BA)|n||',
+            'Chapada Diamantina (BA)|n|lencois|',
+            'Maceió (AL)|n|mcz|',
+            'Maragogi (AL)|n|caribe brasileiro|',
+            'São Miguel dos Milagres (AL)|n||',
+            'Porto de Galinhas (PE)|n|ipojuca|porto-de-galinhas',
+            'Recife (PE)|n|rec|',
+            'Olinda (PE)|n||',
+            'Fernando de Noronha (PE)|n|noronha|',
+            'Natal (RN)|n|genipabu|natal',
+            'Pipa (RN)|n|praia da pipa tibau do sul|',
+            'São Miguel do Gostoso (RN)|n||',
+            'Fortaleza (CE)|n|for|fortaleza',
+            'Jericoacoara (CE)|n|jeri|',
+            'Canoa Quebrada (CE)|n|aracati|',
+            'Cumbuco (CE)|n||',
+            'João Pessoa (PB)|n|jpa|',
+            'Aracaju (SE)|n|aju|',
+            'São Luís (MA)|n||',
+            'Lençóis Maranhenses (MA)|n|barreirinhas|',
+            'Belém (PA)|n||',
+            'Alter do Chão (PA)|n|santarem|',
+            'Manaus (AM)|n|amazonia|',
+            'Brasília (DF)|n|bsb|brasilia',
+            'Caldas Novas (GO)|n||',
+            'Pirenópolis (GO)|n||',
+            'Chapada dos Veadeiros (GO)|n|alto paraiso|',
+            'Bonito (MS)|n||',
+            'Pantanal (MT/MS)|n||',
+            'Ouro Preto (MG)|n|minas historicas|',
+            'Tiradentes (MG)|n|minas historicas|',
+            'Capitólio (MG)|n|canions furnas|',
+            'Belo Horizonte (MG)|n|bh|',
+            'Jalapão (TO)|n||',
+            'Vitória (ES)|n||',
+            'Orlando (EUA)|i|disney universal florida|orlando',
+            'Miami (EUA)|i|florida|',
+            'Nova York (EUA)|i|ny nyc new york|',
+            'Las Vegas (EUA)|i||',
+            'Los Angeles (EUA)|i|la california|',
+            'São Francisco (EUA)|i|san francisco|',
+            'Washington (EUA)|i||',
+            'Cancún (México)|i|cancun caribe mexicano|',
+            'Riviera Maia (México)|i|playa del carmen tulum|riviera-maia',
+            'Cidade do México (México)|i|mexico df|',
+            'Punta Cana (Rep. Dominicana)|i|caribe|',
+            'Cartagena (Colômbia)|i|caribe|cartagena',
+            'Bogotá (Colômbia)|i||',
+            'Medellín (Colômbia)|i||',
+            'San Andrés (Colômbia)|i|caribe|',
+            'Aruba|i|caribe|',
+            'Curaçao|i|caribe curacao|',
+            'Havana (Cuba)|i||',
+            'Santiago (Chile)|i|andes|santiago-do-chile',
+            'Atacama (Chile)|i|san pedro|',
+            'Valparaíso e Viña del Mar (Chile)|i||',
+            'Patagônia (Chile/Argentina)|i|torres del paine|',
+            'Buenos Aires (Argentina)|i|baires|buenos-aires',
+            'Bariloche (Argentina)|i||',
+            'Ushuaia (Argentina)|i|fim do mundo|',
+            'El Calafate (Argentina)|i|glaciar perito moreno|',
+            'Mendoza (Argentina)|i|vinhos|',
+            'Montevidéu (Uruguai)|i||',
+            'Punta del Este (Uruguai)|i||',
+            'Lima (Peru)|i||',
+            'Cusco e Machu Picchu (Peru)|i|machu picchu valle sagrado|cusco-e-machu-picchu',
+            'La Paz e Salar de Uyuni (Bolívia)|i|uyuni|',
+            'Lisboa (Portugal)|i||',
+            'Porto (Portugal)|i||',
+            'Algarve (Portugal)|i|faro|',
+            'Madri (Espanha)|i|madrid|',
+            'Barcelona (Espanha)|i||',
+            'Paris (França)|i||',
+            'Roma (Itália)|i||',
+            'Veneza (Itália)|i||',
+            'Florença (Itália)|i|toscana|',
+            'Milão (Itália)|i||',
+            'Londres (Reino Unido)|i||',
+            'Amsterdã (Holanda)|i|amsterda|',
+            'Berlim (Alemanha)|i||',
+            'Praga (Rep. Tcheca)|i||',
+            'Viena (Áustria)|i||',
+            'Budapeste (Hungria)|i||',
+            'Atenas (Grécia)|i||',
+            'Santorini (Grécia)|i||',
+            'Istambul (Turquia)|i||',
+            'Dubai (Emirados Árabes)|i||',
+            'Tóquio (Japão)|i|toquio|',
+            'Bangkok (Tailândia)|i||',
+            'Phuket (Tailândia)|i||',
+            'Bali (Indonésia)|i||',
+            'Maldivas|i||',
+            'Cairo (Egito)|i||',
+            'Marrakech (Marrocos)|i||',
+            'Cidade do Cabo (África do Sul)|i||',
+            'Toronto (Canadá)|i||',
+            'Vancouver (Canadá)|i||',
+            'Panamá|i||',
+            'Costa Rica|i||',
+            'Jamaica|i|caribe|'
+        ];
+
+        /** Cidades/aeroportos de saída mais comuns. O campo aceita qualquer texto: a lista só ajuda. */
+        const CATALOGO_ORIGENS_BASE = [
+            'Belo Horizonte - Confins (CNF)|n|bh cnf|',
+            'Belo Horizonte - Pampulha (PLU)|n|bh plu|',
+            'São Paulo - Guarulhos (GRU)|n|sp gru|',
+            'São Paulo - Congonhas (CGH)|n|sp cgh|',
+            'Campinas - Viracopos (VCP)|n|vcp|',
+            'Rio de Janeiro - Galeão (GIG)|n|rio gig|',
+            'Rio de Janeiro - Santos Dumont (SDU)|n|rio sdu|',
+            'Brasília (BSB)|n|bsb|',
+            'Salvador (SSA)|n|ssa|',
+            'Recife (REC)|n|rec|',
+            'Fortaleza (FOR)|n|for|',
+            'Natal (NAT)|n|nat|',
+            'Porto Alegre (POA)|n|poa|',
+            'Curitiba (CWB)|n|cwb|',
+            'Florianópolis (FLN)|n|floripa fln|',
+            'Vitória (VIX)|n|vix|',
+            'Goiânia (GYN)|n|gyn|',
+            'Uberlândia (UDI)|n|udi|',
+            'Montes Claros (MOC)|n|moc|',
+            'Ipatinga - Vale do Aço (IPN)|n|ipn|',
+            'Belém (BEL)|n|bel|',
+            'Manaus (MAO)|n|mao|',
+            'Cuiabá (CGB)|n|cgb|',
+            'Campo Grande (CGR)|n|cgr|'
+        ];
+
+        function normalizarTexto(texto) {
+            return String(texto).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+        }
+
+        function montarCatalogo(linhas) {
+            return linhas.map(linha => {
+                const [nome, tipo, apelidos, slug] = linha.split('|');
+                return { nome, tipo: tipo || '?', slug: slug || '', chaveNome: normalizarTexto(nome), chaveApelidos: normalizarTexto(apelidos || ''), propria: false };
+            });
+        }
+
+        const catalogoDestinos = montarCatalogo(CATALOGO_DESTINOS_BASE);
+        const catalogoOrigens = montarCatalogo(CATALOGO_ORIGENS_BASE);
 
         /**
-         * Carrega os nomes de destino a partir de destinos.json pro autocomplete.
-         * Se o arquivo não existir/falhar, o campo continua funcionando como texto livre.
+         * Busca no catálogo: cada palavra digitada precisa começar uma palavra do nome (ou do apelido).
+         * Ordem: começa com o termo > palavra do nome > apelido; empate: destinos com pacote/foto primeiro, depois alfabética.
+         */
+        function buscarNoCatalogo(catalogo, termo, limite) {
+            const tokens = normalizarTexto(termo).split(' ').filter(Boolean);
+            if (tokens.length === 0) return [];
+            const achados = [];
+            for (const item of catalogo) {
+                const palavrasNome = item.chaveNome.split(' ');
+                const palavrasApelido = item.chaveApelidos ? item.chaveApelidos.split(' ') : [];
+                let pontos = 0;
+                let confere = true;
+                for (const t of tokens) {
+                    if (item.chaveNome.startsWith(t)) pontos += 0;
+                    else if (palavrasNome.some(p => p.startsWith(t))) pontos += 1;
+                    else if (palavrasApelido.some(p => p.startsWith(t))) pontos += 3;
+                    else { confere = false; break; }
+                }
+                if (confere) achados.push({ item, pontos: pontos - (item.propria ? 0.5 : 0) });
+            }
+            achados.sort((a, b) => a.pontos - b.pontos || a.item.nome.localeCompare(b.item.nome, 'pt-BR'));
+            return achados.slice(0, limite).map(a => a.item);
+        }
+
+        /** Tipo do destino digitado: 'n' (Brasil), 'i' (internacional) ou '?' (não está na lista). */
+        function tipoDoDestino(nome) {
+            const chave = normalizarTexto(nome);
+            if (chave.length < 3) return '?';
+            const item = catalogoDestinos.find(i => i.chaveNome === chave) || catalogoDestinos.find(i => i.chaveNome.startsWith(chave));
+            return item ? item.tipo : '?';
+        }
+
+        /**
+         * Liga o autocomplete a um campo de texto. Sem innerHTML: tudo entra por textContent.
+         * Setas navegam, Enter escolhe, Esc fecha. O campo continua aceitando texto livre.
+         */
+        function ativarAutocomplete(input, lista, fonte, rotulo) {
+            let itens = [];
+            let ativo = -1;
+            input.setAttribute('role', 'combobox');
+            input.setAttribute('aria-autocomplete', 'list');
+            input.setAttribute('aria-expanded', 'false');
+            input.setAttribute('aria-controls', lista.id);
+            lista.setAttribute('role', 'listbox');
+
+            const fechar = () => {
+                lista.classList.remove('aberta');
+                lista.textContent = '';
+                itens = [];
+                ativo = -1;
+                input.setAttribute('aria-expanded', 'false');
+            };
+            const marcar = (indice) => {
+                const nos = lista.querySelectorAll('.autocomplete-item');
+                nos.forEach((no, i) => {
+                    no.classList.toggle('ativo', i === indice);
+                    no.setAttribute('aria-selected', i === indice ? 'true' : 'false');
+                });
+                ativo = indice;
+                if (nos[indice] && nos[indice].scrollIntoView) nos[indice].scrollIntoView({ block: 'nearest' });
+            };
+            const escolher = (item) => {
+                input.value = item.nome;
+                fechar();
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            };
+            const desenhar = () => {
+                lista.textContent = '';
+                if (itens.length === 0) {
+                    const vazio = document.createElement('div');
+                    vazio.className = 'autocomplete-vazio';
+                    vazio.textContent = 'Nenhum destino na lista — pode digitar do seu jeito mesmo assim';
+                    lista.appendChild(vazio);
+                } else {
+                    itens.forEach((item, i) => {
+                        const no = document.createElement('div');
+                        no.className = 'autocomplete-item';
+                        no.setAttribute('role', 'option');
+                        const nome = document.createElement('span');
+                        nome.textContent = item.nome;
+                        no.appendChild(nome);
+                        if (rotulo && item.tipo !== '?') {
+                            const tag = document.createElement('span');
+                            tag.className = 'autocomplete-tag';
+                            tag.textContent = item.tipo === 'n' ? 'Brasil' : 'Internacional';
+                            no.appendChild(tag);
+                        }
+                        no.addEventListener('click', () => escolher(item));
+                        no.addEventListener('mouseenter', () => marcar(i));
+                        lista.appendChild(no);
+                    });
+                }
+                ativo = -1;
+                lista.classList.add('aberta');
+                input.setAttribute('aria-expanded', 'true');
+            };
+
+            input.addEventListener('input', () => {
+                const termo = input.value.trim();
+                if (!termo) { fechar(); return; }
+                itens = fonte(termo);
+                desenhar();
+            });
+            input.addEventListener('keydown', (evento) => {
+                const aberta = lista.classList.contains('aberta');
+                if (evento.key === 'ArrowDown' && aberta && itens.length) { evento.preventDefault(); marcar((ativo + 1) % itens.length); }
+                else if (evento.key === 'ArrowUp' && aberta && itens.length) { evento.preventDefault(); marcar((ativo - 1 + itens.length) % itens.length); }
+                else if (evento.key === 'Enter' && aberta && ativo >= 0 && itens[ativo]) { evento.preventDefault(); escolher(itens[ativo]); }
+                else if (evento.key === 'Escape' && aberta) { evento.stopPropagation(); fechar(); }
+            });
+            lista.addEventListener('mousedown', (evento) => evento.preventDefault());
+            document.addEventListener('click', (evento) => {
+                if (!input.parentElement.contains(evento.target)) fechar();
+            });
+            return { fechar };
+        }
+
+        /**
+         * Junta os destinos do destinos.json ao catálogo (marca os que têm pacote/foto para aparecerem primeiro).
+         * Se o arquivo não existir/falhar, o autocomplete segue funcionando só com o catálogo embutido.
          */
         async function carregarListaDestinos() {
             try {
                 const resposta = await fetch('destinos.json', { cache: 'no-store' });
                 if (!resposta.ok) return;
-                const destinos = await resposta.json();
-                listaDestinos = Object.values(destinos).map(d => d.nome).sort();
+                const dados = await resposta.json();
+                Object.keys(dados).forEach(slug => {
+                    const d = dados[slug];
+                    if (!d || typeof d.nome !== 'string') return;
+                    const existente = catalogoDestinos.find(i => i.slug === slug);
+                    if (existente) existente.propria = true;
+                    else catalogoDestinos.push({ nome: d.nome, tipo: '?', slug, chaveNome: normalizarTexto(d.nome), chaveApelidos: '', propria: true });
+                });
             } catch (erro) {
                 console.log('Lista de destinos indisponível:', erro);
             }
         }
 
-        function filtrarAutocompleteDestino() {
-            const input = document.getElementById('destino');
-            const lista = document.getElementById('destinoLista');
-            const termo = input.value.trim().toLowerCase();
-
-            if (!termo) {
-                lista.classList.remove('aberta');
-                lista.innerHTML = '';
-                return;
-            }
-
-            const encontrados = listaDestinos.filter(nome => nome.toLowerCase().includes(termo));
-
-            if (encontrados.length === 0) {
-                lista.innerHTML = '<div class="autocomplete-vazio">Nenhum destino encontrado — pode digitar do seu jeito mesmo assim</div>';
-            } else {
-                lista.innerHTML = encontrados.map(nome =>
-                    `<div class="autocomplete-item" onclick="selecionarDestinoAutocomplete('${nome.replace(/'/g, "\\'")}')">${nome}</div>`
-                ).join('');
-            }
-            lista.classList.add('aberta');
+        function iniciarAutocompletes() {
+            ativarAutocomplete(document.getElementById('destino'), document.getElementById('destinoLista'), t => buscarNoCatalogo(catalogoDestinos, t, 8), true);
+            ativarAutocomplete(document.getElementById('cot-destino'), document.getElementById('cot-destino-lista'), t => buscarNoCatalogo(catalogoDestinos, t, 8), true);
+            ativarAutocomplete(document.getElementById('cot-origem'), document.getElementById('cot-origem-lista'), t => buscarNoCatalogo(catalogoOrigens, t, 8), false);
         }
-
-        function selecionarDestinoAutocomplete(nome) {
-            document.getElementById('destino').value = nome;
-            const lista = document.getElementById('destinoLista');
-            lista.classList.remove('aberta');
-            lista.innerHTML = '';
-        }
-
-        // Fecha a lista de autocomplete ao clicar fora
-        document.addEventListener('click', (evento) => {
-            const grupo = document.querySelector('.form-group-destino');
-            if (grupo && !grupo.contains(evento.target)) {
-                document.getElementById('destinoLista').classList.remove('aberta');
-            }
-        });
 
         /**
          * ===================== SÓ IDA =====================
@@ -2145,54 +2748,281 @@
             return false;
         }
 
+        /**
+         * ===================== COTAÇÃO: POPUP + ENVIO PARA A EQUIPE =====================
+         * "Buscar" abre este popup com destino, datas e passageiros já preenchidos. O cliente completa o resto
+         * e a solicitação vai para o bot do Telegram da equipe por um relé (cotacao-worker/worker.js).
+         * O token do bot NUNCA fica no site: só no relé. Enquanto URL_COTACAO estiver vazia, o site usa o WhatsApp.
+         * Para ativar o envio, siga a etapa "ATIVAR O ENVIO DE COTAÇÃO" do PROMPT_CLAUDE_CODE.md.
+         */
+        const URL_COTACAO = '';
+        const TEMPO_LIMITE_ENVIO_MS = 15000;
+
+        let cotacaoAbertaEm = 0;
+        let cotacaoEnviando = false;
+        let mensagemWhatsCotacao = '';
+
+        function hojeLocalISO() {
+            const d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        }
+
+        function descreverViajantes(b) {
+            const partes = [`${b.adultos} ${b.adultos === 1 ? 'adulto' : 'adultos'}`];
+            if (b.criancas > 0) partes.push(`${b.criancas} ${b.criancas === 1 ? 'criança' : 'crianças'} (${b.idadesCriancas.join(', ')} anos)`);
+            if (b.idosos > 0) partes.push(`${b.idosos} ${b.idosos === 1 ? 'pessoa' : 'pessoas'} 60+ (${b.idadesIdosos.join(', ')} anos)`);
+            partes.push(`${b.quartos} ${b.quartos === 1 ? 'quarto' : 'quartos'}`);
+            return partes.join(' · ');
+        }
+
+        function textoCotacao(id) {
+            return document.getElementById(id).value.replace(/\s+/g, ' ').trim();
+        }
+
+        function mostrarErroCotacao(mensagem) {
+            const caixa = document.getElementById('cot-erro');
+            caixa.textContent = mensagem;
+            caixa.hidden = !mensagem;
+            if (!mensagem) document.getElementById('cot-fallback').hidden = true;
+        }
+
+        function atualizarBlocosCotacao() {
+            const marcados = Array.from(document.querySelectorAll('input[name="cot-servico"]:checked')).map(c => c.value);
+            document.getElementById('cot-bloco-hotel').hidden = !marcados.includes('Hospedagem');
+            document.getElementById('cot-bloco-aereo').hidden = !marcados.includes('Passagem aérea');
+            document.getElementById('cot-bloco-passaporte').hidden = tipoDoDestino(document.getElementById('cot-destino').value) === 'n';
+        }
+
+        function ajustarVoltaCotacao() {
+            const somenteIda = document.getElementById('cot-somente-ida').checked;
+            document.getElementById('cot-grupo-volta').hidden = somenteIda;
+            document.getElementById('cot-volta').min = document.getElementById('cot-ida').value || hojeLocalISO();
+        }
+
         function abrirModalCotacao() {
-            document.getElementById('modalCotacao').style.display = 'flex';
+            if (!buscaAtual) return;
+            const b = buscaAtual;
+            document.getElementById('cot-destino').value = b.destino;
+            document.getElementById('cot-ida').value = b.dataIda;
+            document.getElementById('cot-volta').value = b.dataVolta || '';
+            document.getElementById('cot-somente-ida').checked = !b.dataVolta;
+            document.getElementById('cot-ida').min = hojeLocalISO();
+            document.getElementById('cot-viajantes').textContent = descreverViajantes(b);
+            ajustarVoltaCotacao();
+            atualizarBlocosCotacao();
+            mostrarErroCotacao('');
+            document.getElementById('formCotacao').hidden = false;
+            document.getElementById('cot-sucesso').hidden = true;
+            const botao = document.getElementById('cot-enviar');
+            botao.disabled = false;
+            botao.textContent = 'Enviar para cotação';
+            cotacaoEnviando = false;
+            cotacaoAbertaEm = Date.now();
+            const modal = document.getElementById('modalCotacao');
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+            document.getElementById('cotacaoConteudo').scrollTop = 0;
+            const origem = document.getElementById('cot-origem');
+            if (!origem.value) origem.focus();
         }
 
         function fecharModalCotacao() {
-            document.getElementById('modalCotacao').style.display = 'none';
+            const modal = document.getElementById('modalCotacao');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
         }
 
-        function enviarCotacao(event) {
-            event.preventDefault();
+        /** Valida e monta o pacote de dados. Retorna { erro: {mensagem, campo} } ou { dados }. */
+        function coletarDadosCotacao() {
+            const b = buscaAtual;
+            const falha = (mensagem, campo) => ({ erro: { mensagem, campo } });
 
-            if (!buscaAtual) {
-                fecharModalCotacao();
+            const origem = textoCotacao('cot-origem');
+            const destino = textoCotacao('cot-destino');
+            const ida = document.getElementById('cot-ida').value;
+            const somenteIda = document.getElementById('cot-somente-ida').checked;
+            const volta = somenteIda ? '' : document.getElementById('cot-volta').value;
+            const servicos = Array.from(document.querySelectorAll('input[name="cot-servico"]:checked')).map(c => c.value);
+            const perfil = document.getElementById('cot-perfil').value;
+            const nome = textoCotacao('cot-nome');
+            const telefone = textoCotacao('cot-telefone');
+            const digitos = telefone.replace(/\D/g, '');
+            const email = textoCotacao('cot-email');
+            const canal = document.getElementById('cot-canal').value;
+            const hoje = hojeLocalISO();
+
+            if (origem.length < 2) return falha('Informe de onde você vai sair (cidade ou aeroporto).', 'cot-origem');
+            if (destino.length < 2) return falha('Informe o destino.', 'cot-destino');
+            if (!ida) return falha('Informe a data de ida.', 'cot-ida');
+            if (ida < hoje) return falha('A data de ida não pode ser no passado.', 'cot-ida');
+            if (!somenteIda && !volta) return falha('Informe a data de volta ou marque "Só ida".', 'cot-volta');
+            if (!somenteIda && volta < ida) return falha('A volta precisa ser depois da ida.', 'cot-volta');
+            if (servicos.length === 0) return falha('Escolha pelo menos um item para cotar.', 'cot-bloco-servicos');
+            if (!perfil) return falha('Escolha o perfil da viagem.', 'cot-perfil');
+            if (nome.length < 3) return falha('Informe seu nome completo.', 'cot-nome');
+            if (digitos.length < 10 || digitos.length > 13) return falha('Informe um telefone válido, com DDD.', 'cot-telefone');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return falha('Informe um e-mail válido.', 'cot-email');
+            if (!canal) return falha('Escolha como prefere ser atendido.', 'cot-canal');
+            if (!document.getElementById('cot-consentimento').checked) return falha('Para enviar, é preciso autorizar o uso dos dados.', 'cot-consentimento');
+
+            const querHotel = servicos.includes('Hospedagem');
+            const querAereo = servicos.includes('Passagem aérea');
+            const internacional = tipoDoDestino(destino) !== 'n';
+
+            return {
+                dados: {
+                    versao: 1,
+                    origem, destino, ida,
+                    volta: somenteIda ? null : volta,
+                    somenteIda,
+                    flex: document.getElementById('cot-flex').value,
+                    servicos,
+                    adultos: b.adultos,
+                    criancas: b.criancas,
+                    idadesCriancas: b.idadesCriancas.map(Number),
+                    idosos: b.idosos,
+                    idadesIdosos: b.idadesIdosos.map(Number),
+                    quartos: b.quartos,
+                    perfil,
+                    orcamento: document.getElementById('cot-orcamento').value,
+                    hotelCategoria: querHotel ? document.getElementById('cot-hotel').value : '',
+                    hotelRegime: querHotel ? document.getElementById('cot-regime').value : '',
+                    bagagem: querAereo ? document.getElementById('cot-bagagem').value : '',
+                    preferenciaVoo: querAereo ? document.getElementById('cot-voo').value : '',
+                    passaporte: internacional ? document.getElementById('cot-passaporte').value : '',
+                    obs: document.getElementById('cot-obs').value.replace(/[ \t]+/g, ' ').trim(),
+                    nome, telefone, email, canal,
+                    horario: document.getElementById('cot-horario').value,
+                    comoConheceu: document.getElementById('cot-conheceu').value,
+                    consentimento: true,
+                    site: document.getElementById('cot-site').value,
+                    tempoMs: Date.now() - cotacaoAbertaEm
+                }
+            };
+        }
+
+        function dataBR(iso) {
+            return iso ? iso.split('-').reverse().join('/') : '';
+        }
+
+        /** Mesmo pedido em texto, para o plano B pelo WhatsApp. */
+        function montarMensagemWhatsCotacao(d) {
+            const linhas = [
+                'Olá! Vim pelo site e quero uma cotação:',
+                `- Saindo de: ${d.origem}`,
+                `- Destino: ${d.destino}`,
+                `- Ida: ${dataBR(d.ida)}${d.volta ? ` | Volta: ${dataBR(d.volta)}` : ' | Somente ida'} (${d.flex})`,
+                `- Quero cotar: ${d.servicos.join(', ')}`,
+                `- Viajantes: ${descreverViajantes({ adultos: d.adultos, criancas: d.criancas, idadesCriancas: d.idadesCriancas, idosos: d.idosos, idadesIdosos: d.idadesIdosos, quartos: d.quartos })}`,
+                `- Perfil: ${d.perfil}`
+            ];
+            if (d.orcamento) linhas.push(`- Orçamento: ${d.orcamento}`);
+            if (d.hotelCategoria) linhas.push(`- Hotel: ${d.hotelCategoria} | Alimentação: ${d.hotelRegime}`);
+            if (d.bagagem) linhas.push(`- Bagagem: ${d.bagagem} | Voo: ${d.preferenciaVoo}`);
+            if (d.passaporte) linhas.push(`- Passaporte: ${d.passaporte}`);
+            if (d.obs) linhas.push(`- Observações: ${d.obs}`);
+            linhas.push(`- Nome: ${d.nome}`, `- Telefone: ${d.telefone}`, `- E-mail: ${d.email}`, `- Prefere ser atendido por: ${d.canal} (${d.horario})`);
+            return linhas.join('\n');
+        }
+
+        function mostrarSucessoCotacao(texto, protocolo) {
+            document.getElementById('formCotacao').hidden = true;
+            document.getElementById('cot-sucesso').hidden = false;
+            document.getElementById('cot-sucesso-texto').textContent = texto;
+            document.getElementById('cot-protocolo').textContent = protocolo || '';
+            document.getElementById('cot-protocolo-linha').hidden = !protocolo;
+            document.getElementById('cotacaoConteudo').scrollTop = 0;
+        }
+
+        async function enviarCotacao(event) {
+            event.preventDefault();
+            if (cotacaoEnviando || !buscaAtual) return false;
+            mostrarErroCotacao('');
+
+            const resultado = coletarDadosCotacao();
+            if (resultado.erro) {
+                mostrarErroCotacao(resultado.erro.mensagem);
+                const campo = document.getElementById(resultado.erro.campo);
+                if (campo) {
+                    if (campo.focus) campo.focus();
+                    if (campo.scrollIntoView) campo.scrollIntoView({ block: 'center' });
+                }
+                return false;
+            }
+            const dados = resultado.dados;
+            mensagemWhatsCotacao = montarMensagemWhatsCotacao(dados);
+
+            if (dados.site) {
+                // campo-isca preenchido: é robô. Finge sucesso e não envia nada.
+                mostrarSucessoCotacao('Recebemos o seu pedido. Nossa equipe entra em contato pelo canal escolhido.', '');
                 return false;
             }
 
-            const perfil = document.getElementById('perfilViagem').value;
-            const querSeguro = document.getElementById('querSeguro').checked;
-            const querTransfer = document.getElementById('querTransfer').checked;
-            const email = document.getElementById('emailContato').value;
-            const telefone = document.getElementById('telefoneContato').value;
-            const canal = document.getElementById('canalContato').value;
-
-            const linhasPassageiros = [`${buscaAtual.adultos} adulto(s)`];
-            if (buscaAtual.criancas > 0) {
-                linhasPassageiros.push(`${buscaAtual.criancas} criança(s) (idades: ${buscaAtual.idadesCriancas.join(', ')})`);
-            }
-            if (buscaAtual.idosos > 0) {
-                linhasPassageiros.push(`${buscaAtual.idosos} pessoa(s) 60+ (idades: ${buscaAtual.idadesIdosos.join(', ')})`);
+            if (!URL_COTACAO) {
+                abrirWhatsApp('', mensagemWhatsCotacao);
+                mostrarSucessoCotacao('Abrimos o WhatsApp com a sua solicitação. É só enviar a mensagem para falar com a nossa equipe.', '');
+                return false;
             }
 
-            const mensagem = [
-                'Olá! Vim pelo site e não achei pacote pronto pra essa configuração — quero cotação:',
-                `- Destino: ${buscaAtual.destino}`,
-                `- Ida: ${buscaAtual.dataIda}${buscaAtual.dataVolta ? ` | Volta: ${buscaAtual.dataVolta}` : ' | Somente ida'}`,
-                `- Passageiros: ${linhasPassageiros.join(' + ')}`,
-                `- Quartos: ${buscaAtual.quartos}`,
-                `- Perfil de viagem: ${perfil}`,
-                `- Seguro viagem: ${querSeguro ? 'Sim' : 'Não'}`,
-                `- Transfer: ${querTransfer ? 'Sim' : 'Não'}`,
-                `- E-mail: ${email}`,
-                `- Telefone: ${telefone}`,
-                `- Prefere ser atendido por: ${canal}`,
-            ].join('\n');
-
-            abrirWhatsApp('', mensagem);
-            fecharModalCotacao();
+            cotacaoEnviando = true;
+            const botao = document.getElementById('cot-enviar');
+            botao.disabled = true;
+            botao.textContent = 'Enviando…';
+            const controle = new AbortController();
+            const relogio = setTimeout(() => controle.abort(), TEMPO_LIMITE_ENVIO_MS);
+            try {
+                const resposta = await fetch(URL_COTACAO, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados),
+                    credentials: 'omit',
+                    referrerPolicy: 'no-referrer',
+                    signal: controle.signal
+                });
+                const corpo = await resposta.json().catch(() => null);
+                if (!resposta.ok || !corpo || corpo.ok !== true) {
+                    const erro = new Error(corpo && typeof corpo.erro === 'string' ? corpo.erro : 'falha');
+                    erro.servidor = !!(corpo && corpo.erro);
+                    throw erro;
+                }
+                const canal = dados.canal === 'Ligação' ? 'ligação' : dados.canal;
+                mostrarSucessoCotacao(`Nossa equipe vai preparar a sua proposta e entrar em contato por ${canal}.`, String(corpo.protocolo || ''));
+                mensagemWhatsCotacao = corpo.protocolo ? `Olá! Enviei uma cotação pelo site (protocolo ${corpo.protocolo}).` : mensagemWhatsCotacao;
+            } catch (erro) {
+                const motivo = erro && erro.servidor ? erro.message : 'Não conseguimos enviar agora.';
+                mostrarErroCotacao(`${motivo} Você pode enviar a mesma solicitação pelo WhatsApp.`);
+                document.getElementById('cot-fallback').hidden = false;
+                botao.disabled = false;
+                botao.textContent = 'Tentar enviar de novo';
+            } finally {
+                clearTimeout(relogio);
+                cotacaoEnviando = false;
+            }
             return false;
+        }
+
+        function iniciarModalCotacao() {
+            const modal = document.getElementById('modalCotacao');
+            document.getElementById('formCotacao').addEventListener('submit', enviarCotacao);
+            document.getElementById('cotacaoFechar').addEventListener('click', fecharModalCotacao);
+            document.getElementById('cot-sucesso-fechar').addEventListener('click', fecharModalCotacao);
+            modal.addEventListener('click', (evento) => { if (evento.target === modal) fecharModalCotacao(); });
+            document.addEventListener('keydown', (evento) => {
+                if (evento.key === 'Escape' && modal.style.display === 'flex') fecharModalCotacao();
+            });
+            document.getElementById('cot-somente-ida').addEventListener('change', ajustarVoltaCotacao);
+            document.getElementById('cot-ida').addEventListener('change', ajustarVoltaCotacao);
+            document.getElementById('cot-destino').addEventListener('input', atualizarBlocosCotacao);
+            document.getElementById('cot-destino').addEventListener('change', atualizarBlocosCotacao);
+            document.querySelectorAll('input[name="cot-servico"]').forEach(c => c.addEventListener('change', atualizarBlocosCotacao));
+            document.getElementById('cot-fallback').addEventListener('click', () => abrirWhatsApp('', mensagemWhatsCotacao));
+            document.getElementById('cot-sucesso-whats').addEventListener('click', () => abrirWhatsApp('', mensagemWhatsCotacao));
+            document.getElementById('cot-link-politica').addEventListener('click', fecharModalCotacao);
+            document.getElementById('cot-alterar-viajantes').addEventListener('click', () => {
+                fecharModalCotacao();
+                document.getElementById('passageirosPainel').classList.add('aberto');
+                document.getElementById('formBusca').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
         }
 
         /**
@@ -2220,6 +3050,8 @@
             carregarGaleriasDestinos();
             adicionarAvisoDisponibilidade();
             carregarListaDestinos();
+            iniciarAutocompletes();
+            iniciarModalCotacao();
             atualizarResumoPassageiros();
 
             const hoje = new Date().toISOString().slice(0, 10);
@@ -2228,7 +3060,7 @@
         });
 
         /**
-         * Adiciona o aviso "sujeito a disponibilidade" logo abaixo do preço
+         * Adiciona o aviso de disponibilidade (AVISO_DISPONIBILIDADE) logo abaixo do preço
          * de cada pacote. Roda em todo .pacote-preco existente na página —
          * se você adicionar um card novo depois, o aviso aparece sozinho,
          * sem precisar lembrar de colar o texto de novo.
@@ -2237,7 +3069,7 @@
             document.querySelectorAll('.pacote-preco').forEach(preco => {
                 const aviso = document.createElement('p');
                 aviso.className = 'pacote-preco-aviso';
-                aviso.innerHTML = '⚠️ Preço sujeito a disponibilidade no momento do fechamento';
+                aviso.textContent = AVISO_DISPONIBILIDADE;
                 preco.insertAdjacentElement('afterend', aviso);
             });
         }
@@ -2263,7 +3095,8 @@
 
                     const slug = match[1];
                     const destino = destinos[slug];
-                    if (!destino || !destino.galeria || destino.galeria.length === 0) return;
+                    const galeria = destino && Array.isArray(destino.galeria) ? destino.galeria.filter(caminhoImagemSeguro) : [];
+                    if (galeria.length === 0) return;
 
                     const botao = document.createElement('button');
                     botao.type = 'button';
@@ -2271,7 +3104,7 @@
                     botao.textContent = '📷 Ver fotos';
                     botao.onclick = (evento) => {
                         evento.stopPropagation();
-                        abrirGaleria(destino.galeria, destino.nome || slug);
+                        abrirGaleria(galeria, destino.nome || slug);
                     };
                     wrap.appendChild(botao);
                 });
@@ -2307,8 +3140,8 @@
         }
 
         /**
-         * Busca ofertas.json, filtra as que ainda estão dentro da validade
-         * e monta os cards em #ofertas-semana. Se não houver nenhuma oferta
+         * Busca ofertas.json e monta os cards em #ofertas-semana. O campo "validade" é opcional:
+         * se existir, a oferta some depois da data; se não existir, fica até sair do ofertas.json. Se não houver nenhuma oferta
          * ativa (ou o arquivo não existir), a seção fica oculta.
          */
         async function carregarOfertasSemana() {
@@ -2321,23 +3154,42 @@
 
                 const ofertas = await resposta.json();
                 const hoje = new Date().toISOString().slice(0, 10);
-                const ativas = ofertas.filter(oferta => oferta.validade >= hoje);
+                const ativas = ofertas.filter(oferta => !oferta.validade || oferta.validade >= hoje);
 
                 if (ativas.length === 0) return;
 
-                grid.innerHTML = ativas.map(oferta => `
-                    <div class="oferta-card">
-                        <div class="oferta-foto-wrap">
-                            <img src="${oferta.feed}" alt="Oferta ${oferta.destino}" class="oferta-foto" loading="lazy">
-                        </div>
-                        <div class="oferta-cta">
-                            <button class="pacote-btn" onclick="selecionarPacote('Oferta da semana - ${oferta.destino}')">
-                                Quero essa oferta
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
+                const validas = ativas.filter(oferta => typeof oferta.destino === 'string' && caminhoImagemSeguro(oferta.feed));
+                if (validas.length === 0) return;
 
+                grid.textContent = '';
+                validas.forEach(oferta => {
+                    const card = document.createElement('div');
+                    card.className = 'oferta-card';
+
+                    const fotoWrap = document.createElement('div');
+                    fotoWrap.className = 'oferta-foto-wrap';
+                    const img = document.createElement('img');
+                    img.src = oferta.feed;
+                    img.alt = 'Oferta ' + oferta.destino;
+                    img.className = 'oferta-foto';
+                    img.loading = 'lazy';
+                    fotoWrap.appendChild(img);
+
+                    const cta = document.createElement('div');
+                    cta.className = 'oferta-cta';
+                    const botao = document.createElement('button');
+                    botao.type = 'button';
+                    botao.className = 'pacote-btn';
+                    botao.textContent = 'Quero essa oferta';
+                    botao.addEventListener('click', () => selecionarPacote('Oferta da semana - ' + oferta.destino));
+                    cta.appendChild(botao);
+
+                    card.appendChild(fotoWrap);
+                    card.appendChild(cta);
+                    grid.appendChild(card);
+                });
+
+                document.getElementById('ofertas-aviso').textContent = AVISO_DISPONIBILIDADE;
                 secao.style.display = 'block';
             } catch (erro) {
                 console.log('Ofertas da semana indisponíveis:', erro);

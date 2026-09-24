@@ -1,0 +1,8 @@
+# GitHub Pages (Jekyll): NAO publica estes arquivos no site.
+# Regra: arquivo de desenvolvimento nao precisa ficar acessivel na internet.
+exclude:
+  - CLAUDE.md
+  - scripts
+  - cotacao-worker
+  - README.md
+  - SECURITY.md
